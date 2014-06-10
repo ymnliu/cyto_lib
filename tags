@@ -1,0 +1,186 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+T	threshold.py	/^    T = mahotas.thresholding.otsu(im16)$/;"	v
+X	3d_plot.py	/^X = np.arange(0, im_f32.shape[1])$/;"	v
+X	threshold.py	/^	X = np.arange(0, im16_org.shape[1])$/;"	v
+Y	3d_plot.py	/^Y = np.arange(0, im_f32.shape[0])$/;"	v
+Y	threshold.py	/^	Y = np.arange(0, im16_org.shape[0])$/;"	v
+Z	3d_plot.py	/^Z = im_f32$/;"	v
+Z	threshold.py	/^	Z = im16_org$/;"	v
+abnormal_list	threshold.py	/^abnormal_list = []$/;"	v
+arg	3d_plot.py	/^arg =  sys.argv$/;"	v
+ax	3d_plot.py	/^ax = fig.add_subplot(2, 1, 1)$/;"	v
+ax	3d_plot.py	/^ax = fig.add_subplot(2, 1, 2, projection='3d')$/;"	v
+ax	threshold.py	/^	ax = fig.add_subplot(3, 3, 9, projection='3d')$/;"	v
+bbox	skit-sample.py	/^             bbox=dict(alpha=.7, facecolor='w'))$/;"	v
+check_exist_and_create	cyto_export.py	/^def check_exist_and_create(dir_path):$/;"	f
+class_count	cyto_classification.py	/^class_count = 3 $/;"	v
+clf	cyto_classification.py	/^clf = clf.fit( train , train_truth)$/;"	v
+clf	cyto_classification.py	/^clf = ensemble.RandomForestClassifier() $/;"	v
+covars	skit-sample.py	/^covars = .5 * np.tile(np.identity(2), (4, 1, 1))$/;"	v
+delta	3d_all.py	/^    delta = t2 - t1$/;"	v
+display	3d_plot.py	/^display = False$/;"	v
+display	cp_sample.py	/^display = False$/;"	v
+display	energy.py	/^display = False$/;"	v
+display	threshold.py	/^display = False #True $/;"	v
+dmask	threshold.py	/^    dmask = pm.dilate(max_mask)$/;"	v
+duration	3d_all.py	/^duration = te - ts$/;"	v
+energy_list	energy.py	/^energy_list = []$/;"	v
+energy_list	threshold.py	/^energy_list = []$/;"	v
+error_count	cyto_classification.py	/^error_count = [0, 0, 0]$/;"	v
+error_disomy_count	cyto_classification.py	/^error_disomy_count = 0$/;"	v
+error_idx	cyto_classification.py	/^	error_idx = int(test_result[i] - 1)$/;"	v
+error_matrix	cyto_classification.py	/^error_matrix = np.zeros((3, 3))$/;"	v
+error_rate_matrix	cyto_classification.py	/^error_rate_matrix = error_matrix \/ (test_real_size - train_real_size).T$/;"	v
+error_rate_matrix	cyto_classification.py	/^error_rate_matrix = np.zeros((3, 3))$/;"	v
+f	3d_all.py	/^f = []$/;"	v
+f	3d_plot.py	/^f = []$/;"	v
+f	cp_sample.py	/^f = []$/;"	v
+f	cyto_export.py	/^f = []$/;"	v
+f	energy.py	/^f = []$/;"	v
+f	energy.py	/^f = f[:sample_size]$/;"	v
+f	threshold.py	/^f = []$/;"	v
+fig	3d_plot.py	/^fig = plt.figure(figsize=plt.figaspect(2.))$/;"	v
+fig	threshold.py	/^	fig = plt.figure(figsize=plt.figaspect(1.))$/;"	v
+file_list	load_image.py	/^file_list = []$/;"	v
+filter_org	threshold.py	/^    filter_org = im16_blur $/;"	v
+fname	3d_plot.py	/^    fname = arg[1].rsplit('\/', 1)[1]$/;"	v
+fname	3d_plot.py	/^    fname = f[index]$/;"	v
+fname	3d_plot.py	/^fname = ''$/;"	v
+get_features	cyto_feature.py	/^def get_features(img_dir, label, sample_len):$/;"	f
+get_local_feature	cyto_local_feature.py	/^def get_local_feature(img):$/;"	f
+get_mask	cyto_local_feature.py	/^def get_mask(img_org):$/;"	f
+get_region_feature	cyto_local_feature.py	/^def get_region_feature(img, region_list):$/;"	f
+i	3d_all.py	/^i = 0$/;"	v
+i	cp_sample.py	/^i = 0$/;"	v
+i	energy.py	/^i = 0$/;"	v
+idx	load_image.py	/^idx = 100$/;"	v
+im16	threshold.py	/^    im16 = im16_org$/;"	v
+im16_blur	threshold.py	/^    im16_blur = ndimage.gaussian_filter(top_hat, sigma=1)$/;"	v
+im16_org	load_image.py	/^im16_org = try_image(img_dir, file_list, idx)$/;"	v
+im16_org	threshold.py	/^    im16_org = ot.open_cyto_tiff(img_path)$/;"	v
+im_f32	3d_plot.py	/^im_f32 = np.float32(im_uint16)  $/;"	v
+im_f32	cp_sample.py	/^    im_f32 = np.float32(im_uint16) \/ 255 $/;"	v
+im_m16	energy.py	/^    im_m16 = np.matrix(im_uint16)$/;"	v
+im_m2	energy.py	/^    im_m2 = np.matrix(sq_im)$/;"	v
+im_ma	threshold.py	/^    im_ma = im16 * mmask$/;"	v
+im_uint16	3d_plot.py	/^im_uint16 = cv2.imread(img_path, cv2.CV_LOAD_IMAGE_UNCHANGED)     $/;"	v
+im_uint16	cp_sample.py	/^    im_uint16 = cv2.imread(img_dir + '\/' + img, cv2.CV_LOAD_IMAGE_UNCHANGED)     $/;"	v
+im_uint16	energy.py	/^    im_uint16 = cv2.imread(img_dir + '\/' + img, cv2.CV_LOAD_IMAGE_UNCHANGED)    $/;"	v
+im_uint8	cp_sample.py	/^    im_uint8 = im_uint16 \/ 255$/;"	v
+img_dir	3d_plot.py	/^    img_dir = '\/home\/sijialiu\/Dropbox\/2014.2.21-Disomy-control-images'$/;"	v
+img_dir	cp_sample.py	/^img_dir = '\/home\/sijialiu\/Dropbox\/2014.2.21-Disomy-control-images'$/;"	v
+img_dir	cyto_classification.py	/^img_dir =[ '..\/data\/monosomy_05082014',$/;"	v
+img_dir	cyto_export.py	/^img_dir = '..\/data\/disomy_05082014'$/;"	v
+img_dir	energy.py	/^img_dir = '\/home\/sijialiu\/Dropbox\/2014.2.21-Disomy-control-images'$/;"	v
+img_dir	load_image.py	/^img_dir = '..\/data\/disomy_05082014'$/;"	v
+img_dir	threshold.py	/^img_dir = '..\/data\/disomy_05082014'$/;"	v
+img_path	3d_all.py	/^    img_path = input_dir + '\/' + fname$/;"	v
+img_path	3d_plot.py	/^    img_path = arg[1]$/;"	v
+img_path	3d_plot.py	/^    img_path = img_dir + '\/' + f[index]$/;"	v
+img_path	threshold.py	/^    img_path = img_dir + '\/' + f[index]$/;"	v
+index	3d_plot.py	/^index = 4;$/;"	v
+input_dir	3d_all.py	/^input_dir = '..\/2014.2.21-Disomy-control-images'$/;"	v
+localtime	cyto_classification.py	/^localtime = time.asctime( time.localtime(time.time()) )$/;"	v
+main	fun_3d.py	/^def main(argv):$/;"	f
+mask	threshold.py	/^    mask =  filter_org > thres_ratio * peak $/;"	v
+max_idx	threshold.py	/^    max_idx = im16_org.argmax()$/;"	v
+max_label	threshold.py	/^    max_label = labeled[max_idx \/ w][max_idx % w]$/;"	v
+means	skit-sample.py	/^means = np.array([[0.0,  0.0],$/;"	v
+mmask	threshold.py	/^    mmask = im16 > thres_ratio * T$/;"	v
+model	skit-sample.py	/^model = hmm.GaussianHMM(4, "full", start_prob, trans_mat,$/;"	v
+ndmask	threshold.py	/^    ndmask = ~dmask$/;"	v
+noise_thres_ratio	threshold.py	/^    noise_thres_ratio = .5 * thres_ratio$/;"	v
+normalize_columns	cyto_feature.py	/^def normalize_columns(arr):$/;"	f
+num_bins	energy.py	/^num_bins = 40$/;"	v
+num_bins	threshold.py	/^    num_bins = sample_size \/ 20$/;"	v
+open_cyto_tiff	open_cyto_tiff.py	/^def open_cyto_tiff(path):$/;"	f
+output_dir	3d_all.py	/^output_dir = 'output_subplot'$/;"	v
+output_dir	3d_plot.py	/^output_dir = 'output_subplot'$/;"	v
+output_dir	cp_sample.py	/^output_dir = '..\/output_img'$/;"	v
+output_dir	cyto_export.py	/^output_dir = '..\/output_disomy'$/;"	v
+output_dir	threshold.py	/^output_dir = '..\/output_img'$/;"	v
+output_org	threshold.py	/^output_org = '..\/org_out'$/;"	v
+output_path	3d_plot.py	/^	fname.rsplit('.', 2)[0] + '.png'$/;"	v
+output_path	threshold.py	/^		    f[index].rsplit('.', 2)[0] + '_3_3.png'$/;"	v
+output_path	threshold.py	/^		f[index].rsplit('.', 2)[0] + '.png'$/;"	v
+output_path_org	threshold.py	/^		f[index].rsplit('.', 2)[0] + '.png'$/;"	v
+output_path_tmp	cp_sample.py	/^    output_path_tmp =  output_dir + '\/' + str(i).zfill(4) + '_' + img$/;"	v
+output_path_tmp	cp_sample.py	/^    output_path_tmp = output_path_tmp.rsplit('.', 1)[0] + '.png'$/;"	v
+peak	threshold.py	/^    peak = filter_org.max()$/;"	v
+peak_list	threshold.py	/^peak_list = []$/;"	v
+peak_template	threshold.py	/^    peak_template = dmask * im16_org$/;"	v
+pre_processing	cyto_feature.py	/^def pre_processing(img):$/;"	f
+print_block	cyto_util.py	/^def print_block(str_print):$/;"	f
+print_block	yummy_util.py	/^def print_block(str_print):$/;"	f
+print_flag	cyto_export.py	/^print_flag = True$/;"	v
+print_flag	threshold.py	/^    print_flag = False$/;"	v
+processed_count	cyto_export.py	/^processed_count = 0$/;"	v
+processed_count	load_image.py	/^processed_count = 0$/;"	v
+processed_count	threshold.py	/^	processed_count = processed_count + 1$/;"	v
+processed_count	threshold.py	/^processed_count = 0$/;"	v
+random_state	skit-sample.py	/^                        random_state=42)$/;"	v
+ratio_peak	threshold.py	/^    ratio_peak = removed_peak.max() \/ (peak * 1.)$/;"	v
+remove_all	cyto_export.py	/^def remove_all(dir_path):$/;"	f
+remove_all	threshold.py	/^def remove_all(dir_path):$/;"	f
+removed_peak	threshold.py	/^    removed_peak = ndmask * im16_org$/;"	v
+result_list	threshold.py	/^result_list = []$/;"	v
+sample_size	3d_all.py	/^sample_size = 20$/;"	v
+sample_size	3d_plot.py	/^sample_size = 10$/;"	v
+sample_size	cp_sample.py	/^sample_size = 1000$/;"	v
+sample_size	cyto_export.py	/^sample_size = 200$/;"	v
+sample_size	energy.py	/^sample_size = 2000$/;"	v
+sample_size	threshold.py	/^sample_size = 40 #len(f) $/;"	v
+save_org_flag	threshold.py	/^	save_org_flag = False$/;"	v
+save_org_flag	threshold.py	/^	save_org_flag = True$/;"	v
+save_org_flag	threshold.py	/^    save_org_flag = False$/;"	v
+save_org_flag	threshold.py	/^save_org_flag = False $/;"	v
+second_peak_list	threshold.py	/^second_peak_list = [] #np.zeros(sample_size)$/;"	v
+skip_count	threshold.py	/^	skip_count = skip_count + 1$/;"	v
+skip_count	threshold.py	/^skip_count = 0$/;"	v
+sq_im	energy.py	/^    sq_im = im_uint16 ** 2$/;"	v
+start_prob	skit-sample.py	/^start_prob = np.array([0.6, 0.3, 0.1, 0.0])$/;"	v
+sum_col	energy.py	/^    sum_col = im_m16.sum()$/;"	v
+sum_list	energy.py	/^sum_list = []$/;"	v
+sum_sq	energy.py	/^    sum_sq = im_m2.sum()$/;"	v
+surf	3d_plot.py	/^surf = ax.plot_surface(X, Y, Z, rstride=1, $/;"	v
+surf	threshold.py	/^	surf = ax.plot_surface(X, Y, Z, rstride=1, $/;"	v
+t1	3d_all.py	/^    t1 = datetime.now()$/;"	v
+t2	3d_all.py	/^    t2 = datetime.now()$/;"	v
+te	3d_all.py	/^te = datetime.now()$/;"	v
+test	cyto_classification.py	/^	test = np.vstack((test, test_tmp))$/;"	v
+test	cyto_classification.py	/^	test = test_tmp$/;"	v
+test	cyto_classification.py	/^test = np.array([])$/;"	v
+test_dir	cyto_classification.py	/^test_dir = '..\/data\/disomy_02212014'$/;"	v
+test_real_size	cyto_classification.py	/^test_real_size = np.zeros(class_count)$/;"	v
+test_result	cyto_classification.py	/^test_result = clf.predict(test)$/;"	v
+test_result	cyto_classification.py	/^test_result = clf.predict(test_tmp)$/;"	v
+test_size	cyto_classification.py	/^test_size = 4 * train_size$/;"	v
+test_tmp	cyto_classification.py	/^    test_tmp = cf.get_features(img_dir[i], i + 1, test_size)$/;"	v
+test_tmp	cyto_classification.py	/^test_tmp = cf.get_features(test_dir, 2, test_size)$/;"	v
+test_truth	cyto_classification.py	/^    test_truth =  np.hstack((test_truth, test_truth_tmp))$/;"	v
+test_truth	cyto_classification.py	/^test_truth = []$/;"	v
+test_truth_tmp	cyto_classification.py	/^    test_truth_tmp =  (i + 1) * np.ones(test_real_size[i]) $/;"	v
+thres_list	threshold.py	/^thres_list = []$/;"	v
+thres_ratio	threshold.py	/^    thres_ratio = .3$/;"	v
+top_hat	threshold.py	/^    top_hat = ndimage.morphology.white_tophat(im16_org, (5, 5))$/;"	v
+top_hat_mask	threshold.py	/^    top_hat_mask = ndimage.morphology.white_tophat(mask, (4, 4))$/;"	v
+total	3d_all.py	/^total = 0.0$/;"	v
+train	cyto_classification.py	/^	train = np.vstack((train, train_tmp))$/;"	v
+train	cyto_classification.py	/^	train = train_tmp$/;"	v
+train	cyto_classification.py	/^train = np.array([])$/;"	v
+train_real_size	cyto_classification.py	/^train_real_size = np.zeros(class_count)$/;"	v
+train_size	cyto_classification.py	/^train_size = 30$/;"	v
+train_tmp	cyto_classification.py	/^    train_tmp = cf.get_features(img_dir[i], i + 1, train_size)$/;"	v
+train_truth	cyto_classification.py	/^    train_truth =  np.hstack((train_truth, train_truth_tmp))$/;"	v
+train_truth	cyto_classification.py	/^train_truth = []$/;"	v
+train_truth_tmp	cyto_classification.py	/^    train_truth_tmp =  (i + 1) * np.ones(train_real_size[i]) $/;"	v
+trans_mat	skit-sample.py	/^trans_mat = np.array([[0.7, 0.2, 0.0, 0.1],$/;"	v
+truth_idx	cyto_classification.py	/^	truth_idx = int(test_truth[i] - 1)$/;"	v
+try_image	load_image.py	/^def try_image(img_dir, file_list, index):$/;"	f
+ts	3d_all.py	/^ts = datetime.now()$/;"	v
+verbose_flag	threshold.py	/^verbose_flag = False$/;"	v
