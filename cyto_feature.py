@@ -10,11 +10,9 @@ from scipy import misc
 
 from skimage import transform
 from skimage import filter
-from skimage.morphology import erosion, dilation, opening, closing, white_tophat
+from skimage.morphology import erosion, dilation, closing, white_tophat
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image
 from skimage.morphology import disk
-
-
 
 import cv2
 import numpy as np
@@ -24,8 +22,6 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.misc import imread, imsave
 from scipy import ndimage
-
-
 
 def normalize_columns(arr):
     rows, cols = arr.shape
@@ -83,8 +79,8 @@ def get_features(img_dir, label, sample_len):
 	else:
 	    processed_count = processed_count + 1
 
-	im16 = pre_processing(im16_org)
-	#im16 = im16_org
+	#im16 = pre_processing(im16_org)
+	im16 = im16_org
 	h, w = im16.shape
 	max_idx = im16.argmax()
 

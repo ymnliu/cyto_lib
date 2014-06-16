@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import open_cyto_tiff as ot
 import cyto_local_feature as clf
+from cyto_image import CytoImage
+
 
 import os
 import sys
@@ -9,6 +11,8 @@ from os import listdir
 from os import mkdir
 from os import walk
 from scipy import misc 
+
+from cyto_image import CytoImage
 
 import cv2
 import numpy as np
@@ -29,7 +33,7 @@ def try_image(img_dir, file_list, index):
 	print "skip image: " + img_path 
 	return try_image(img_dir, file_list, index + 1)
 
-    return img
+    return img, img_path 
 
 
 img_dir = '../data/disomy_05082014'
@@ -40,14 +44,20 @@ for (dirpath, dirnames, filenames) in walk(img_dir):
     break
 
 processed_count = 0
-idx = 100
+idx = 105
 
-    
-im16_org = try_image(img_dir, file_list, idx)
-print clf.get_local_feature(im16_org)
+im16_org, img_path = try_image(img_dir, file_list, idx)
+#img_path = img_dir + '/' + file_list[idx]
 
-if True:
+#print clf.get_local_feature(im16_org)
+img = CytoImage(img_path)
+
+#img.cyto_show()
+#print img.get_spots_feature()
+print img.get_cyto_spots()
+
+
+if False:
     plt.imshow(im16_org)
     plt.show()
-
 
