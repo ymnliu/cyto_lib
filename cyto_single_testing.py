@@ -2,7 +2,9 @@
 
 import open_cyto_tiff as ot
 import cyto_feature as cf
-from yummy_util import print_block
+from cyto_util import print_block, load_cyto_list
+
+from cyto_image import CytoImage
 
 from sklearn import svm
 from sklearn.datasets import load_iris
@@ -11,10 +13,8 @@ from sklearn import ensemble
 import numpy as np
 import time
 
-
 localtime = time.asctime( time.localtime(time.time()) )
 print_block("Local current time :" +  localtime)
-
 
 class_count = 3 
 img_dir =[ '../data/monosomy_05082014',
@@ -54,43 +54,43 @@ clf = ensemble.RandomForestClassifier()
 clf = clf.fit( train , train_truth)
 
 ############################################################
-##	bunch Testing
+##	Stream Testing
 ############################################################
 
-# prepare test set
-for i in 0, 1, 2:
-    test_tmp = cf.get_features(img_dir[i], i + 1, test_size)
-    test_real_size[i] = test_tmp.shape[0]
-    test_truth_tmp =  (i + 1) * np.ones(test_real_size[i]) 
-    test_truth =  np.hstack((test_truth, test_truth_tmp))
-
-    if test.shape[0] is 0:
-	test = test_tmp
-    else:
-	test = np.vstack((test, test_tmp))
-
-test_result = clf.predict(test)
-
-#print test_result
-
-error_count = [0, 0, 0]
+testing_count = np.zeros((3, 1))
+error_count = np.zeros((3, 1))
 
 error_matrix = np.zeros((3, 3))
 error_rate_matrix = np.zeros((3, 3))
 
-for i in range(0, len(test_truth)) :
-    if test_result[i] != test_truth[i]:
-	truth_idx = int(test_truth[i] - 1)
-	error_idx = int(test_result[i] - 1)
-	error_count[truth_idx] +=  1
-	error_matrix[truth_idx][error_idx] += 1
+for label in 0, 1, 2:
+    file_list = load_cyto_list(label)
+    
+    for index in range(0, test_size):
+	img_path = file_list[index]
+	#print 'opening: ' + img_path
+	#im16_org = ot.open_cyto_tiff(img_path)
+	
+	testing_count[label] +=  1
+	c_img = CytoImage(img_path)	
+	#feature_tmp = get_image_feature(im16_org)
+	res = clf.predict(c_img.get_feature())[0]
+	
+	if res != (label + 1):
+	    truth_idx = int(label)
+	    error_idx = int(res - 1)
+	    error_count[truth_idx] +=  1
+	    error_matrix[truth_idx][error_idx] += 1
 
-#print str(error_count) + " out of " + str(len(test_truth))
-#print error_count / (len(test_truth) * 1.)
+	print str(label + 1) +  " -> " + str( res )
+
+#print test_result
+
+
 print error_count    
 print error_matrix
 
-error_rate_matrix = error_matrix / (test_real_size - train_real_size).T
+error_rate_matrix = error_matrix /  (testing_count).T
 print error_rate_matrix
 
 print_block("Test on Disomy Data")
@@ -101,7 +101,8 @@ test_result = clf.predict(test_tmp)
 
 error_disomy_count = 0
 for i in range(len(test_result)):
-    if test_result[i] != 2:
+    if test_result[i] != 3:
 	error_disomy_count += 1
 
+print test_result
 print "Test Error Rate: " + str(error_disomy_count / (test_size * 1.))

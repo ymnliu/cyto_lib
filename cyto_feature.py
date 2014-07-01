@@ -23,6 +23,10 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.misc import imread, imsave
 from scipy import ndimage
 
+
+thres_ratio = .3
+noise_thres_ratio = .5 * thres_ratio
+
 def normalize_columns(arr):
     rows, cols = arr.shape
     for col in xrange(cols):
@@ -31,7 +35,99 @@ def normalize_columns(arr):
 def pre_processing(img):
     return transform.downscale_local_mean(img, (2, 2))
 
+def get_image_feature(img):
+    im16 = img
+    h, w = im16.shape
+    max_idx = im16.argmax()
+
+    top_hat = ndimage.morphology.white_tophat(im16, (5, 5))
+    
+    im16_blur = ndimage.gaussian_filter(top_hat, sigma=1)
+    
+    filter_org = im16_blur 
+    
+    peak = filter_org.max()
+    mask =  filter_org > thres_ratio * peak 
+   
+    # ostu threshold
+    #T = mahotas.thresholding.otsu(im16)
+    T = filter.threshold_otsu(im16)
+
+    mmask = im16 > thres_ratio * T
+    im_ma = im16 * mmask
+    
+    labeled, nr_obj = ndimage.label(mask)
+    max_label = labeled[max_idx / w][max_idx % w]
+    max_mask = labeled == max_label 
+
+    top_hat_mask = ndimage.morphology.white_tophat(mask, (4, 4))
+    
+    selem = disk(3)
+    dmask = dilation(max_mask,selem)
+    ndmask = ~dmask
+    
+    peak_template = dmask * im16
+    removed_peak = ndmask * im16
+    
+    ratio_peak = removed_peak.max() / (peak * 1.)
+    
+    feature_list = [T, ratio_peak, nr_obj, im16.max(), np.sum(im_ma)]
+    
+    return feature_list
+
 def get_features(img_dir, label, sample_len):
+    f = []
+    if not os.path.exists(img_dir):
+	sys.exit( 'Dir cannot found: ' + img_dir )
+
+    print 'searching the directory: ' + img_dir  
+
+    for (dirpath, dirnames, filenames) in walk(img_dir):
+	f.extend(filenames)
+	break
+
+    f.sort()
+    if sample_len > 0 :
+	sample_size = sample_len
+    else:
+	sample_size = len(f) 
+
+    display = False #True 
+    save_org_flag = False 
+    verbose_flag = False
+
+    if verbose_flag:
+	print 'samples: ' + str(sample_size)
+
+    skip_count = 0
+    processed_count = 0
+    
+    feature_all = np.array([])
+
+    for index in range(0, sample_size):
+	img_path = img_dir + '/' + f[index]
+	#print 'opening: ' + img_path
+	im16_org = ot.open_cyto_tiff(img_path)
+	
+	if im16_org is None:
+	    skip_count = skip_count + 1
+	    if verbose_flag:
+	       print "skip image: " + path
+	    continue
+	else:
+	    processed_count = processed_count + 1
+	
+	feature_tmp = get_image_feature(im16_org)
+	 
+	if feature_all.shape[0] is 0:
+	    feature_all = np.asarray(feature_tmp)
+	else:
+	    feature_all = np.vstack((feature_all, feature_tmp))
+    
+    return feature_all
+
+
+def get_features_dpr(img_dir, label, sample_len):
     f = []
     if not os.path.exists(img_dir):
 	sys.exit( 'Dir cannot found: ' + img_dir )
@@ -78,7 +174,8 @@ def get_features(img_dir, label, sample_len):
 	    continue
 	else:
 	    processed_count = processed_count + 1
-
+	
+	get_image_feature(im16_org)
 	#im16 = pre_processing(im16_org)
 	im16 = im16_org
 	h, w = im16.shape
@@ -133,9 +230,6 @@ def get_features(img_dir, label, sample_len):
 	peak_list.append(im16.max())
 	
 	energy_list.append(np.sum(im_ma))
-	#sys.stdout.write("Preparing features: %d%%   \r" % 
-	#	(100 * processed_count / (sample_size - skip_count) + 1) )
-	#sys.stdout.flush()
       
     result_array = np.asarray(result_list)
     obj_array = np.asarray(obj_num_list)
@@ -144,13 +238,6 @@ def get_features(img_dir, label, sample_len):
     energy_array = np.asarray(energy_list)
     thres_array  = np.asarray(thres_list)
 
-    """
-    np.append(result_array, obj_array)
-    np.append(result_array, peak_array)
-    np.append(result_array, second_peak_array)
-    np.append(result_array, energy_array)
-    np.append(result_array, thres_array)
-    """
     result_all = [obj_array,
     	    peak_array, second_peak_array, energy_array, thres_array]
     #print result_all
