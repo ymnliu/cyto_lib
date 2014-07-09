@@ -73,8 +73,12 @@ for label in 0, 1, 2:
 	
 	testing_count[label] +=  1
 	c_img = CytoImage(img_path)	
+	c_img.get_feature()	
+	
+	
+	'''
 	#feature_tmp = get_image_feature(im16_org)
-	res = clf.predict(c_img.get_feature())[0]
+	#res = clf.predict(c_img.get_feature())[0]
 	
 	if res != (label + 1):
 	    truth_idx = int(label)
@@ -85,7 +89,6 @@ for label in 0, 1, 2:
 	print str(label + 1) +  " -> " + str( res )
 
 #print test_result
-
 
 print error_count    
 print error_matrix
@@ -106,3 +109,4 @@ for i in range(len(test_result)):
 
 print test_result
 print "Test Error Rate: " + str(error_disomy_count / (test_size * 1.))
+'''

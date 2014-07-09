@@ -46,7 +46,7 @@ for (dirpath, dirnames, filenames) in walk(img_dir):
     break
 
 processed_count = 0
-idx = 105
+idx = 107
 
 im16_org, img_path = try_image(img_dir, file_list, idx)
 #img_path = img_dir + '/' + file_list[idx]
@@ -64,7 +64,6 @@ for spot in spots:
 #ax = plt.subplot(2, 2, 1)
 #img.cyto_show_spots(ax)
 img.show_each_spot()
-
 
 #plt.imshow(img.get_mask())
 plt.show()
