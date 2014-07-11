@@ -15,6 +15,19 @@ def print_block(str_print):
     print "##" * 30
     print ""
 
+def try_image(img_dir, file_list, index):
+    filename = file_list[index]
+    img_path = img_dir + '/' + filename
+    #print 'opening: ' + img_path
+    img = ot.open_cyto_tiff(img_path)
+
+    if img is None:
+	print "skip image: " + img_path 
+	return try_image(img_dir, file_list, index + 1)
+
+    print 'opening: ' + img_path
+    return img, img_path 
+
 def gen_all_cyto_list(label, list_len=0):
 
     img_dir = img_dir_list[label] 
