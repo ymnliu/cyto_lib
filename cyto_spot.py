@@ -1,6 +1,7 @@
 import numpy as np
 from skimage.measure import regionprops, label
 import matplotlib.pyplot as plt
+from gaussian_func import gaussian_fit_2d
 
 class CytoSpot:
     'class of spots in cytometry image'
@@ -37,7 +38,6 @@ class CytoSpot:
 
     def get_features(self):
 	region = self.region
-	result = []
 	
 	f = []
 	minr, minc, maxr, maxc = region.bbox
@@ -52,7 +52,6 @@ class CytoSpot:
 	f.append(region.eccentricity)
 	f.append(region.equivalent_diameter)
 	
-	
 	f.append(region.solidity)   #Ratio of pixels in the region 
 				    #to pixels of the convex hull image.
 
@@ -60,9 +59,13 @@ class CytoSpot:
 	f.append((mat**2).sum() / (region.area * 1.))
 	f.append(mat.sum() / (region.area * 1.))
 	
-	result.append(f)
+	# from param idx 9-15
+	f = np.concatenate([f, self.get_2d_gaussian_param()])	
 
-	return result
+	return f
+    
+    def get_2d_gaussian_param(self):
+	return gaussian_fit_2d(self.data)
 
     def show_spot(self, ax):
 	ax.plot(self.data)

@@ -73,7 +73,21 @@ def gaussian_fit_1d():
     ax.imshow(img.data)
     plt.show()
 
-def gaussian_fit_2d():
+def gaussian_fit_2d(data2d):
+    data = data2d
+    
+    (w, h) = data.shape
+    x = range(0, h)
+    y = range(0, w)
+    x, y = np.meshgrid(x, y)
+    
+    init_0 = (data.max(), h/2, w/2, 1, 1, 0, 0)	
+
+    popt, pcov = curve_fit( twoD_Gaussian_theta, (x, y), data.ravel(), p0=init_0)
+    return  popt 
+	
+
+def gaussian_plot_2d():
     # Create x and y indices
     
     fig = plt.figure()
@@ -99,6 +113,8 @@ def gaussian_fit_2d():
 	init_0 = (data.max(), h/2, w/2, 1, 1, 0, 0)	
 
 	popt, pcov = curve_fit( twoD_Gaussian_theta, (x, y), data.ravel(), p0=init_0)
+	print  popt 
+	#print pcov
 	data_fitted = twoD_Gaussian_theta((x, y), *popt)
 	
 #	popt, pcov = curve_fit( twoD_Gaussian_cov, (x, y), data.ravel(), p0=init_0)
@@ -111,4 +127,4 @@ def gaussian_fit_2d():
 
     plt.show()
 
-gaussian_fit_2d()
+gaussian_plot_2d()

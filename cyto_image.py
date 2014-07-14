@@ -13,10 +13,11 @@ class CytoImage:
     'Class of cytometry image'
     data = np.asarray([])
     noise_ratio = .3
-    spots = []
 
     def __init__(self, path):
 	self.data = ot.open_cyto_tiff(path)
+	self.spots = []
+	#print "spots count init"
 
     def open_image(self, path):
 	self.data = ot.open_cyto_tiff(path)

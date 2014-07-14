@@ -21,7 +21,7 @@ img_dir =[ '../data/monosomy_05082014',
 	    '../data/disomy_05082014',
 	    '../data/trisomy_05082014']
 
-train_size = 30
+train_size = 300
 test_size = 4 * train_size
 
 train_real_size = np.zeros(class_count)
@@ -82,7 +82,7 @@ for label in 0, 1, 2:
 	    error_count[truth_idx] +=  1
 	    error_matrix[truth_idx][error_idx] += 1
 
-	print str(label + 1) +  " -> " + str( res )
+	#print str(label + 1) +  " -> " + str( res )
 
 #print test_result
 

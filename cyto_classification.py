@@ -42,7 +42,8 @@ train_acc = 0
 
 # prepare training set
 for i in range(class_count):
-    train_tmp = cf.get_features(img_dir[i], i , train_size)
+    train_tmp = cf.load_features(i , train_size)
+    
     train_real_size[i] = train_tmp.shape[0]
     train_acc += train_real_size[i]
     train_lim.append(train_acc)
@@ -53,7 +54,6 @@ for i in range(class_count):
 	train = train_tmp
     else:
 	train = np.vstack((train, train_tmp))
-
 
 '''
 #print train_truth
@@ -76,12 +76,22 @@ color_str = ['rx', 'g^', 'bo']
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
+fid = [3, 4, 5]
+
 for i in range(0, len(train_truth)) :
     color_idx = color_str[int(train_truth[i])]
     #plt.plot(train[i][0], train[i][4], color_idx)
-    ax.scatter(train[i][0], train[i][1], train[i][4], c=color_idx[0],
-	    marker=color_idx[1])
-    #plt.plot(train[i][:1],  color_idx)
+    ax.scatter(train[i][fid[0]], train[i][fid[1]], train[i][fid[2]], 
+	    c=color_idx[0],  marker=color_idx[1])
+
+#ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
+plt.title('feature discrimination\n' + 
+	    str([cf.feature_dsp[x] for x in fid ]))
+print [cf.feature_dsp[x] for x in fid ]
+print fid
+ax.set_xlabel(cf.feature_dsp[fid[0]])
+ax.set_ylabel(cf.feature_dsp[fid[1]])
+ax.set_zlabel(cf.feature_dsp[fid[2]])
 
 plt.show()
 
