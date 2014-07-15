@@ -5,7 +5,6 @@ from cyto_util import load_cyto_list
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
 
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -16,9 +15,9 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 #ax = fig.add_subplot(111)
 color_str = ['rx', 'y^', 'bo']
-fid = [6, 12, 8]
+fid = [0, 5, 9]
 
-label_list = [0, 1]
+label_list = [0, 1, 2]
 
 for label in label_list: 
 
@@ -40,11 +39,13 @@ for label in label_list:
 	tmp_res = len(spots) 
 	res[tmp_res] += 1
 	#if tmp_res != label + 1:
+	#    img.cyto_show()
 	#    img.show_each_spot()
 
 	for spot in spots:
 	    ftmp =  spot.get_features()
 	    #ftmp =  spot.get_2d_gaussian_param()
+	    
 	    if spot_feature.shape[0] is 0:
 		spot_feature = ftmp
 	    else:
@@ -54,17 +55,15 @@ for label in label_list:
     feature_all.append(spot_feature)
     print res
 
-print [x for x in feature_all]
+#print [x for x in feature_all]
 
 for label in label_list:
 	color_idx = color_str[label]
 	d2plot = feature_all[label].T
 	#plt.plot(d2plot[0], d2plot[3], color_idx)
 
-	ax.scatter(d2plot[fid[0]], 
-		d2plot[fid[1]],
-		d2plot[fid[2]], 
-		c=color_idx[0],  marker=color_idx[1])
+	ax.scatter(d2plot[fid[0]], d2plot[fid[1]],
+		d2plot[fid[2]], c=color_idx[0],  marker=color_idx[1])
 
 #ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
 #plt.title('feature discrimination\n' + 

@@ -1,4 +1,4 @@
-import open_cyto_tiff as ot
+import cyto_util as cu
 import cyto_local_feature
 import cyto_feature as cf
 from cyto_spot import CytoSpot
@@ -15,12 +15,13 @@ class CytoImage:
     noise_ratio = .3
 
     def __init__(self, path):
-	self.data = ot.open_cyto_tiff(path)
+	self.data = cu.open_cyto_tiff(path)
+	self.path = path
 	self.spots = []
 	#print "spots count init"
 
     def open_image(self, path):
-	self.data = ot.open_cyto_tiff(path)
+	self.data = cu.open_cyto_tiff(path)
 	return self.data
 
     def cyto_show(self):

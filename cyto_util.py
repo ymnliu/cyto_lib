@@ -1,6 +1,7 @@
 import os 
 import sys
-import open_cyto_tiff as ot
+#import open_cyto_tiff as ot
+import skimage.io
 
 from os import listdir, mkdir, walk
 
@@ -79,3 +80,13 @@ def load_cyto_list(label):
     list_name = '../data/' + str(label) + '.dat' 
     return [line.rstrip('\n') for line in open(list_name)]
 
+def open_cyto_tiff(path):
+    try:
+	#im16 = cv2.cv.LoadImage(path, cv2.CV_LOAD_IMAGE_UNCHANGED)   
+	#im_m16 = np.matrix(im16)
+	#im_array = np.asarray(im16[:,:])
+	im16 = skimage.io.imread(path, plugin='freeimage')
+	return im16
+    except:
+	#print "skip image: " + path
+	return None
