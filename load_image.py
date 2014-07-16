@@ -8,14 +8,12 @@ import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
 
-sample_count = 100
+sample_count = 10
 feature_all = []
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
 #ax = fig.add_subplot(111)
 color_str = ['rx', 'y^', 'bo']
-fid = [0, 5, 9]
+fid = [0, 1, 6]
 
 label_list = [0, 1, 2]
 
@@ -38,9 +36,11 @@ for label in label_list:
 	idx += 1
 	tmp_res = len(spots) 
 	res[tmp_res] += 1
-	#if tmp_res != label + 1:
+	if tmp_res != label + 1:
 	#    img.cyto_show()
-	#    img.show_each_spot()
+	    spot_fig = img.show_each_spot()
+	    spot_fig.suptitle(str(idx) +'\n' + img.path, fontsize=12)	
+	    plt.show()
 
 	for spot in spots:
 	    ftmp =  spot.get_features()
@@ -73,7 +73,12 @@ for label in label_list:
 #ax.set_xlabel(cf.feature_dsp[fid[0]])
 #ax.set_ylabel(cf.feature_dsp[fid[1]])
 #ax.set_zlabel(cf.feature_dsp[fid[2]])
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
 
+ax.set_xlabel('$x_1$')
+ax.set_ylabel('$x_2$')
+ax.set_zlabel('$x_3$')
 plt.show()
 
 #print spot_feature

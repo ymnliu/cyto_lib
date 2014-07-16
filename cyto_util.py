@@ -1,6 +1,5 @@
 import os 
 import sys
-#import open_cyto_tiff as ot
 import skimage.io
 
 from os import listdir, mkdir, walk
@@ -28,6 +27,13 @@ def try_image(img_dir, file_list, index):
 
     print 'opening: ' + img_path
     return img, img_path 
+
+def remove_all(dir_path):
+    if os.path.exists(dir_path):
+	shutil.rmtree(dir_path)		
+	print "Directory files removed: " + dir_path
+    else:
+	print "Directory: \'" + dir_path + "\' does not exist"
 
 def gen_all_cyto_list(label, list_len=0):
 

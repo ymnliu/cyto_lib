@@ -23,12 +23,6 @@ import mahotas
 import pymorph as pm
 import pylab
 
-def remove_all(dir_path):
-    if os.path.exists(dir_path):
-	shutil.rmtree(dir_path)		
-	print "Directory files removed: " + dir_path
-    else:
-	print "Directory: \'" + dir_path + "\' does not exist"
 
 f = []
 #img_dir = '/home/sijialiu/Dropbox/group/cytometry/canyouseethisimages'

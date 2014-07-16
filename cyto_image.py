@@ -92,19 +92,30 @@ class CytoImage:
 	return ax
 
     def show_each_spot(self):
-	#fig = plt.figure()   	
-	#fig = plt.subplots(ncols=1, nrows=1, figsize=(6, 6))
 	fig = plt.figure(figsize=plt.figaspect(1.))
-
 	idx = 1
 	for spot in self.spots:
 	    ax = fig.add_subplot(2,2, idx)
 	    idx += 1
-	    #ax.plot(spot.data)#show spot in curve. can be useful
+    	    #ax.plot(spot.data)#show spot in curve. can be useful
 
 	    ax.imshow(spot.data, interpolation='nearest')
+	
+	ax = fig.add_subplot(2,2, idx)
+	ax.imshow(self.data, interpolation='nearest')
+	
+	for spot in self.spots:
+	    minr = (spot.origin[0] - spot.epd_sz) 
+	    maxr = spot.origin[0]
+	    minc = (spot.origin[1] - spot.epd_sz)
+	    maxc = (spot.origin[1] )
 	    
-	plt.show()
+	    rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]), 
+		    spot.size[1], spot.size[0],
+		    fill=False, edgecolor='red', linewidth=1)
+	    ax.add_patch(rect)
+	#plt.show()
+	return fig
 
     def get_feature(self):
 	return cf.get_image_feature(self.data)

@@ -1,4 +1,7 @@
-from load_image import spots, img
+#from load_image import spots, img
+from cyto_image import CytoImage
+from cyto_util import load_cyto_list
+
 import numpy as np
 
 from scipy import signal
@@ -88,8 +91,12 @@ def gaussian_fit_2d(data2d):
 	
 
 def gaussian_plot_2d():
-    # Create x and y indices
     
+    label = 2
+    img_idx = 104
+    img = CytoImage(load_cyto_list(label)[img_idx])
+    spots = img.get_cyto_spots() 
+
     fig = plt.figure()
     idx = 0
     
@@ -125,6 +132,8 @@ def gaussian_plot_2d():
 
 	#data = twoD_Gaussian((x, y), 3, 100, 100, 20, 40, 0, 10)
 
+    ax = fig.add_subplot(2, 2, idx + 1)
+    ax.imshow(img.data)
     plt.show()
 
 gaussian_plot_2d()
