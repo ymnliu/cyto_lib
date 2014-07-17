@@ -7,6 +7,7 @@ from cyto_util import print_block
 from sklearn import svm
 from sklearn.datasets import load_iris
 from sklearn import ensemble
+from sklearn.decomposition import PCA
 
 import numpy as np
 import time
@@ -55,6 +56,14 @@ for i in range(class_count):
     else:
 	train = np.vstack((train, train_tmp))
 
+pca = PCA()
+
+pca.fit(train) 
+print(pca.explained_variance_ratio_) 
+print(pca.components_) 
+
+
+print train.shape
 '''
 #print train_truth
 # prepare test set
@@ -72,16 +81,37 @@ for i in 0, 1, 2:
 
 color_str = ['rx', 'g^', 'bo']
 
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+fig = plt.figure(figsize=(16,8))
+ax = fig.add_subplot(121, projection='3d')
 
 fid = [3, 4, 5]
 
+d2plot = train
 for i in range(0, len(train_truth)) :
     color_idx = color_str[int(train_truth[i])]
-    #plt.plot(train[i][0], train[i][4], color_idx)
-    ax.scatter(train[i][fid[0]], train[i][fid[1]], train[i][fid[2]], 
+    #plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
+    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]], 
+	    c=color_idx[0],  marker=color_idx[1])
+
+#ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
+plt.title('feature discrimination\n' + 
+	    str([cf.feature_dsp[x] for x in fid ]))
+print [cf.feature_dsp[x] for x in fid ]
+print fid
+ax.set_xlabel(cf.feature_dsp[fid[0]])
+ax.set_ylabel(cf.feature_dsp[fid[1]])
+ax.set_zlabel(cf.feature_dsp[fid[2]])
+
+
+ax = fig.add_subplot(122, projection='3d')
+
+fid = [0, 1, 2]
+
+d2plot = pca.transform(train)
+for i in range(0, len(train_truth)) :
+    color_idx = color_str[int(train_truth[i])]
+    #plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
+    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]], 
 	    c=color_idx[0],  marker=color_idx[1])
 
 #ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
@@ -94,8 +124,6 @@ ax.set_ylabel(cf.feature_dsp[fid[1]])
 ax.set_zlabel(cf.feature_dsp[fid[2]])
 
 plt.show()
-
-
 '''
 ########################################
 ##  training
@@ -105,7 +133,7 @@ print_block("Training Classifier...")
 
 #clf = tree.DecisionTreeClassifier()
 clf = ensemble.RandomForestClassifier() 
-clf = clf.fit( train , train_truth)
+clf = clf.fit( d2plot , train_truth)
 
 ############################################################
 ##	bunch Testing
