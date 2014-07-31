@@ -2,6 +2,8 @@ import os
 import sys
 import skimage.io
 
+import numpy as np
+
 from os import listdir, mkdir, walk
 
 img_dir_list =[ '../data/monosomy_05082014',
@@ -96,3 +98,20 @@ def open_cyto_tiff(path):
     except:
 	#print "skip image: " + path
 	return None
+
+def serialize(_data):
+    data = np.floor(_data/100) 
+    res = np.array([])	
+    it = np.nditer(data, flags=['multi_index'])
+    while not it.finished:
+	(d, x, y) =  (it[0], it.multi_index[0], it.multi_index[1])
+	dtmp = np.tile([x, y], (d, 1))
+	if res.shape[0]is 0:
+	    res = dtmp
+	else:
+	    res = np.vstack((res, dtmp))
+
+	it.iternext()
+    
+    return res
+

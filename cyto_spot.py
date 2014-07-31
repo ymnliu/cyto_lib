@@ -2,6 +2,8 @@ import numpy as np
 from skimage.measure import regionprops, label
 import matplotlib.pyplot as plt
 from gaussian_func import gaussian_fit_2d
+from scipy import sparse
+
 
 class CytoSpot:
     'class of spots in cytometry image'
@@ -13,7 +15,7 @@ class CytoSpot:
     origin = (-1, -1)
     size = ( -1, -1)
     bbox = (-1, -1, -1, -1)
-    noise_ratio = .3
+    noise_ratio = .1
     
     def __init__(self, data):
 	org_data = data
@@ -59,15 +61,48 @@ class CytoSpot:
 	f.append((mat**2).sum() / (region.area * 1.))
 	f.append(mat.sum() / (region.area * 1.))
 	
+	try:
+	    pcov =  self.get_gaussian_cov() 
+	#print self.get_2d_gaussian_param()[0].shape
+	    if pcov > 1e5:
+		return None
 	# from param idx 9-15
-	f = np.concatenate([f, self.get_2d_gaussian_param()])	
-
-	return f
+	    f = np.concatenate((f, self.get_2d_gaussian_param()[0], np.array([pcov])))
+	    return f
+	except:
+	    print "spot discarded"
+	    return None
+   
+    def get_gaussian_cov(self):
+	popt, pcov =  self.get_2d_gaussian_param()
+	return np.sqrt(np.diag(pcov)).sum()
     
     def get_2d_gaussian_param(self):
-	return gaussian_fit_2d(self.data)
+	popt, pcov =  gaussian_fit_2d(self.data)
+	return (popt, pcov)
 
     def show_spot(self, ax):
 	ax.plot(self.data)
 	return ax 
 	
+    def get_sparse_data(self):
+	return sparse.coo_matrix(self.data) 
+    
+    def get_log_data(self):
+	return np.log(self.data + np.ones(self.data.shape) )
+
+    def serilize(self):
+	data = np.floor(self.data/50) 
+	res = np.array([])	
+	it = np.nditer(data, flags=['multi_index'])
+	while not it.finished:
+	    (d, x, y) =  (it[0], it.multi_index[0], it.multi_index[1])
+	    dtmp = np.tile([x, y], (d, 1))
+	    if res.shape[0]is 0:
+		res = dtmp
+	    else:
+		res = np.vstack((res, dtmp))
+
+	    it.iternext()
+	
+	return res

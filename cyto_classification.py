@@ -61,7 +61,7 @@ pca = PCA()
 pca.fit(train) 
 print(pca.explained_variance_ratio_) 
 print(pca.components_) 
-
+print pca.get_params()
 
 print train.shape
 '''
@@ -115,7 +115,7 @@ for i in range(0, len(train_truth)) :
 	    c=color_idx[0],  marker=color_idx[1])
 
 #ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
-plt.title('feature discrimination\n' + 
+plt.title('After PCA\n' + 
 	    str([cf.feature_dsp[x] for x in fid ]))
 print [cf.feature_dsp[x] for x in fid ]
 print fid

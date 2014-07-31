@@ -7,6 +7,7 @@ import numpy as np
 from scipy import signal
 from scipy.fftpack import fft, fftshift
 import matplotlib.pyplot as plt
+from matplotlib import cm
 from scipy.optimize import curve_fit
 
 # Define model function to be used to fit to the data above:
@@ -93,7 +94,7 @@ def gaussian_fit_2d(data2d):
 def gaussian_plot_2d():
     
     label = 2
-    img_idx = 104
+    img_idx = 6 
     img = CytoImage(load_cyto_list(label)[img_idx])
     spots = img.get_cyto_spots() 
 
@@ -127,13 +128,16 @@ def gaussian_plot_2d():
 #	popt, pcov = curve_fit( twoD_Gaussian_cov, (x, y), data.ravel(), p0=init_0)
 #	data_fitted = twoD_Gaussian_cov((x, y), *popt)
 	
-	ax.imshow(data.reshape(w,h))
+	imgplot = ax.imshow(data.reshape(w,h), interpolation='nearest')
+	imgplot.set_cmap('gray')
+
 	ax.contour(x, y, data_fitted.reshape(w, h))
 
 	#data = twoD_Gaussian((x, y), 3, 100, 100, 20, 40, 0, 10)
 
     ax = fig.add_subplot(2, 2, idx + 1)
-    ax.imshow(img.data)
+    imgplot = ax.imshow(img.data)
+    imgplot.set_cmap('gray')
     plt.show()
 
 gaussian_plot_2d()

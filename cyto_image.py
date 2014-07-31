@@ -12,7 +12,7 @@ from skimage.measure import regionprops, label
 class CytoImage:
     'Class of cytometry image'
     data = np.asarray([])
-    noise_ratio = .3
+    noise_ratio = CytoSpot.noise_ratio 
 
     def __init__(self, path):
 	self.data = cu.open_cyto_tiff(path)
@@ -33,6 +33,8 @@ class CytoImage:
 	skeleton = skeletonize(img)
 	
 	mask = dilation(skeleton > 0, disk(2))
+
+	self.masked_data = mask * self.data
 	return mask
 
     def get_cyto_spots(self):
@@ -119,3 +121,19 @@ class CytoImage:
 
     def get_feature(self):
 	return cf.get_image_feature(self.data)
+
+    def serilize(self):
+	data = np.floor(self.masked_data/100) 
+	res = np.array([])	
+	it = np.nditer(data, flags=['multi_index'])
+	while not it.finished:
+	    (d, x, y) =  (it[0], it.multi_index[0], it.multi_index[1])
+	    dtmp = np.tile([x, y], (d, 1))
+	    if res.shape[0]is 0:
+		res = dtmp
+	    else:
+		res = np.vstack((res, dtmp))
+
+	    it.iternext()
+	
+	return res

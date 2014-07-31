@@ -40,9 +40,8 @@ def gaussian_fit_2d(data2d):
     
     init_0 = (data.max(), h/2, w/2, 1, 1, 0, 0)	
     try:
-	popt, pcov = curve_fit( twoD_Gaussian_theta, (x, y), data.ravel(), p0=init_0)
-	return popt 
+        popt, pcov = curve_fit( twoD_Gaussian_theta, (x, y), data.ravel(), p0=init_0)
+	return popt, pcov 
     except RuntimeError:
 	print("Error - curve_fit failed")
-	return init_0 
-
+	return None
