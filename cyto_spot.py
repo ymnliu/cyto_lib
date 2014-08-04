@@ -1,4 +1,7 @@
 import numpy as np
+import warnings
+with warnings.catch_warnings():
+        warnings.filterwarnings("ignore",category=DeprecationWarning)
 from skimage.measure import regionprops, label
 import matplotlib.pyplot as plt
 from gaussian_func import gaussian_fit_2d
@@ -15,7 +18,7 @@ class CytoSpot:
     origin = (-1, -1)
     size = ( -1, -1)
     bbox = (-1, -1, -1, -1)
-    noise_ratio = .1
+    noise_ratio = .3
     
     def __init__(self, data):
 	org_data = data
@@ -72,7 +75,8 @@ class CytoSpot:
 	except:
 	    print "spot discarded"
 	    return None
-   
+  
+
     def get_gaussian_cov(self):
 	popt, pcov =  self.get_2d_gaussian_param()
 	return np.sqrt(np.diag(pcov)).sum()

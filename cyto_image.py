@@ -2,12 +2,17 @@ import cyto_util as cu
 import cyto_local_feature
 import cyto_feature as cf
 from cyto_spot import CytoSpot
+import warnings
+with warnings.catch_warnings():
+        warnings.filterwarnings("ignore",category=DeprecationWarning)
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from skimage.morphology import skeletonize, dilation, disk
 from skimage.measure import regionprops, label
+
+
 
 class CytoImage:
     'Class of cytometry image'
@@ -54,6 +59,28 @@ class CytoImage:
 	    self.spots.append(spot)
 	
 	return self.spots
+
+    def get_spots_feature(self):
+	spots = self.get_cyto_spots()
+	train = np.array([])	
+
+	for spot in spots:
+	    train_tmp = spot.get_features()
+	    if train_tmp is None:
+		continue
+
+	    if train.shape[0] is 0:
+		train = train_tmp
+	    else:
+		print train.shape, train_tmp.shape
+		train = np.vstack((train, train_tmp))
+	
+	if train.shape[0] is 1:
+	    train = train.T
+	return train
+
+    def get_n_component(self):
+	return len(self.spots)
 
     def cyto_show_spots(self, ax=None):
 	if ax is None:
@@ -120,7 +147,7 @@ class CytoImage:
 	return fig
 
     def get_feature(self):
-	return cf.get_image_feature(self.data)
+	return np.array(cf.get_image_feature(self.data))
 
     def serilize(self):
 	data = np.floor(self.masked_data/100) 

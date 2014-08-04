@@ -12,6 +12,7 @@ from sklearn import ensemble
 
 import numpy as np
 import time
+from random import shuffle
 
 localtime = time.asctime( time.localtime(time.time()) )
 print_block("Local current time :" +  localtime)
@@ -21,8 +22,8 @@ img_dir =[ '../data/monosomy_05082014',
 	    '../data/disomy_05082014',
 	    '../data/trisomy_05082014']
 
-train_size = 50
-test_ratio = 1.02
+train_size = 500
+test_ratio = 1.1
 
 test_size = int((test_ratio - 1) * train_size)
 print test_size
@@ -31,10 +32,11 @@ train_real_size = np.zeros(class_count)
 test_real_size = np.zeros(class_count)
 train = np.array([])
 test = np.array([])
-train_truth = []
+train_truth = np.array([])
 test_truth = []
 
 # prepare training set
+'''
 for i in 0, 1, 2:
     train_tmp = cf.get_features(img_dir[i], i + 1, train_size)
     train_real_size[i] = train_tmp.shape[0]
@@ -45,6 +47,29 @@ for i in 0, 1, 2:
 	train = train_tmp
     else:
 	train = np.vstack((train, train_tmp))
+'''
+
+for label in 0, 1, 2:
+    file_list = load_cyto_list(label)
+    shuffle(file_list)
+    
+    for index in range(0, train_size):
+	
+	img_path = file_list[index]
+	
+	c_img = CytoImage(img_path)	
+	train_tmp = c_img.get_feature()  
+	
+	if train.shape[0] is 0:
+	    train = train_tmp
+	else:
+	    train = np.vstack((train, train_tmp))
+
+	train_truth_tmp =  (label + 1) * np.ones(1) 
+	train_truth =  np.hstack((train_truth, train_truth_tmp))
+
+print train.shape
+print train_truth.shape
 
 ########################################
 ##  training
@@ -70,7 +95,8 @@ hi_matrix = np.zeros((3, 3))
 
 for label in 0, 1, 2:
     file_list = load_cyto_list(label)
-    
+    shuffle(file_list)
+
     for index in range(train_size,  train_size + test_size):
 	img_path = file_list[index]
 	#print 'opening: ' + img_path
@@ -104,16 +130,3 @@ print hi_matrix
 error_rate_matrix = error_matrix /  (testing_count).T
 print error_rate_matrix
 
-print_block("Test on Disomy Data")
-
-test_dir = '../data/disomy_02212014'
-test_tmp = cf.get_features(test_dir, 2, test_size)
-test_result = clf.predict(test_tmp)
-
-error_disomy_count = 0
-for i in range(len(test_result)):
-    if test_result[i] != 2:
-	error_disomy_count += 1
-
-print test_result
-print "Test Error Rate: " + str(error_disomy_count / (test_size * 1.))

@@ -15,6 +15,8 @@ from skimage.morphology import erosion, dilation, closing, white_tophat
 from skimage.morphology import black_tophat, skeletonize, convex_hull_image
 from skimage.morphology import disk
 
+from sklearn import mixture
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,6 +26,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.misc import imread, imsave
 from scipy import ndimage
 
+from cyto_util import serialize
 
 thres_ratio = .3
 noise_thres_ratio = .5 * thres_ratio
@@ -71,7 +74,10 @@ def get_image_feature(img):
     removed_peak = ndmask * im16
     
     ratio_peak = removed_peak.max() / (peak * 1.)
+    #aic, bic = get_aic_bic(img)
+    #aic, bic = (0, 0) 
     
+
     feature_list = [T, ratio_peak, nr_obj, im16.max(), 
 	    np.sum(im_ma), np.sum(im16)]
     
@@ -153,4 +159,38 @@ def load_features(label, sample_len):
     
     return feature_all
 
+def get_aic_bic(img):
+    subplot_data = img
 
+    ctype = ['spherical', 'tied', 'diag', 'full']
+
+    aic_res = np.zeros(5)
+    bic_res = np.zeros(5)
+
+    res_idx = 0
+
+    for ncomponents in range(1, 6):
+
+	X_train = np.ceil(serialize(subplot_data))
+	#clf = mixture.DPGMM(n_components=3, covariance_type='full')
+	clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[2],
+		n_iter=100)
+	clf.fit(X_train)
+
+	aic_res[res_idx] = clf.aic(X_train)
+	bic_res[res_idx] = clf.bic(X_train)
+	#print clf.weights_
+	#print clf.means_
+	#print clf.get_params()
+#	x = np.linspace(0.0, subplot_data.shape[0])
+#	y = np.linspace(0.0, subplot_data.shape[1])
+#	X, Y = np.meshgrid(x, y)
+#	XX = np.c_[X.ravel(), Y.ravel()]
+#	#Z = np.log(-clf.score_samples(XX)[0])
+#	Z = np.log(-clf.score_samples(XX)[0])
+#	Z = Z.reshape(X.shape)
+
+	res_idx += 1
+    
+    return np.argmin(aic_res) , np.argmin(bic_res)  
+    #return np.concatenate(aic_res, bic_res)
