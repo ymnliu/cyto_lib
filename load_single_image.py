@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from cyto_image import CytoImage
-from cyto_util import load_cyto_list
+from cyto.image import CytoImage
+from cyto.util import load_cyto_list
 
 import numpy as np
 import matplotlib.pyplot as plt
