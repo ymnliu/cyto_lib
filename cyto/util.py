@@ -1,6 +1,7 @@
 import os 
 import sys
 import skimage.io
+import cv2
 
 import numpy as np
 
@@ -63,11 +64,11 @@ def gen_all_cyto_list(label, list_len=0):
     
     processed_count = 0
     skip_count = 0
-
+    count = 0
     for index in range(0, list_len):
 	img_path = img_dir + '/' + f[index]
 	#print 'opening: ' + img_path
-	im16_org = ot.open_cyto_tiff(img_path)
+	im16_org = open_cyto_tiff_opencv(img_path)
 	
 	if im16_org is None:
 	    skip_count +=  1
@@ -81,8 +82,9 @@ def gen_all_cyto_list(label, list_len=0):
 	sys.stdout.write("skip rate: %d%%   \r" % 
 		(skip_count / (list_len * 1.)) )
 	sys.stdout.flush()
-    
+	count +=1
     fs.close()
+    print str(count) + " files are generated."
     
 def load_cyto_list(label):
     list_name = '../data/' + str(label) + '.dat' 
@@ -90,13 +92,23 @@ def load_cyto_list(label):
 
 def open_cyto_tiff(path):
     try:
-	#im16 = cv2.cv.LoadImage(path, cv2.CV_LOAD_IMAGE_UNCHANGED)   
 	#im_m16 = np.matrix(im16)
 	#im_array = np.asarray(im16[:,:])
 	im16 = skimage.io.imread(path, plugin='freeimage')
 	return im16
     except:
-	#print "skip image: " + path
+	print "skip image: " + path
+	return None
+
+def open_cyto_tiff_opencv(path):
+    try:
+	#im_m16 = np.matrix(im16)
+	#im_array = np.asarray(im16[:,:])
+	#im16 = skimage.io.imread(path, plugin='freeimage')
+	im16 = cv2.imread(path, 0)
+	return im16
+    except:
+	print "skip image: " + path
 	return None
 
 def serialize(_data):

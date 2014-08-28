@@ -17,7 +17,6 @@ fid = [0, 1, 6]
 
 label_list = [0, 1, 2]
 
-
 def load_single_image(label, idx):
     print (label, idx)
 

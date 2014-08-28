@@ -13,7 +13,6 @@ from skimage.morphology import skeletonize, dilation, disk
 from skimage.measure import regionprops, label
 
 
-
 class CytoImage:
     'Class of cytometry image'
     data = np.asarray([])

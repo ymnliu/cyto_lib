@@ -1,18 +1,15 @@
-from cyto_image import CytoImage
-from cyto_util import load_cyto_list
+from cyto.image import CytoImage
+from cyto.util import load_cyto_list
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
 
-
-
 image_list = np.array([[0, 1, 2],[0, 7, 8], [7, 10, 6]])
 #image_list = np.array([[0, 1, 2],[0, 11, 8], [7, 10, 6]])
 
 subplot_idx = 1
-
 
 ax = []
 for label in [0, 1, 2]:
