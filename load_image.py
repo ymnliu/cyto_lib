@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 from mpl_toolkits.mplot3d import Axes3D
 
-sample_count = 1000
+sample_count = 10
 feature_all = []
 
 #ax = fig.add_subplot(111)
@@ -76,7 +76,7 @@ for label in label_list:
     print res
 
 print len(feature_mean)
-
+_
 for feature_vec in feature_mean:
     ax_spot.plot((feature_vec / mean_base).T)
 

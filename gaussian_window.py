@@ -1,6 +1,6 @@
 #from load_image import spots, img
-from cyto_image import CytoImage
-from cyto_util import load_cyto_list
+from cyto.image import CytoImage
+from cyto.util import load_cyto_list, print_block
 
 import numpy as np
 
@@ -91,10 +91,8 @@ def gaussian_fit_2d(data2d):
     return  popt 
 	
 
-def gaussian_plot_2d():
+def gaussian_plot_2d(label, img_idx):
     
-    label = 2
-    img_idx = 6 
     img = CytoImage(load_cyto_list(label)[img_idx])
     spots = img.get_cyto_spots() 
 
@@ -138,6 +136,13 @@ def gaussian_plot_2d():
     ax = fig.add_subplot(2, 2, idx + 1)
     imgplot = ax.imshow(img.data)
     imgplot.set_cmap('gray')
-    plt.show()
 
-gaussian_plot_2d()
+    np.set_printoptions(precision=3, suppress=True)
+    print_block( "Optimial Params:")
+    print popt
+
+    print_block("pcov")
+    print pcov
+
+    plt.show()
+    return popt, pcov

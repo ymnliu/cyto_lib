@@ -30,7 +30,14 @@ def load_single_image(label, idx):
     img.get_cyto_spots()
     spots = img.spots
 
+    return  img
+
+
+"""
     display = True 
+
+
+
 
     #img.cyto_show()
     #spot_fig = img.show_each_spot()
@@ -51,11 +58,10 @@ def load_single_image(label, idx):
 	
     feature_all.append(spot_feature)
 
-    data = img.serilize()
     
-    return (data, img)
 
-#load_single_image(2,2)
+
+
 '''
 #print [x for x in feature_all]
 fig = plt.figure()
@@ -92,3 +98,4 @@ plt.show()
 #plt.imshow(img.get_mask())
 #plt.show()
 '''
+"""

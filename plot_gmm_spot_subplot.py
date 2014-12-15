@@ -14,7 +14,7 @@ import matplotlib.patches as mpatches
 from sklearn import mixture
 
 import  load_single_image as ls
-from cyto_util import serialize
+from cyto.util import serialize
 
 n_samples = 300
 label = 1
@@ -49,7 +49,7 @@ XX = np.c_[X.ravel(), Y.ravel()]
 Z = np.log(-clf.score_samples(XX)[0])
 Z = Z.reshape(X.shape)
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10,110,100) )
 #ax = fig.add_subplot(1, 2, 1, aspect='equal')
 ax = fig.add_subplot(1, 2, 1)
 

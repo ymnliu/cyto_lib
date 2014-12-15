@@ -20,8 +20,8 @@ img_dir =[ '../data/monosomy_05082014',
 	    '../data/disomy_05082014',
 	    '../data/trisomy_05082014']
 
-train_size = 10
-test_ratio = 1.2
+train_size = 200
+test_ratio = 2
 
 test_size = int((test_ratio - 1) * train_size)
 print test_size
@@ -42,7 +42,6 @@ for label in 0, 1, 2:
     
     for index in range(0, train_size):
 	
-	
 	img_path = file_list[index]
 	
 	train_count[label] +=  1
@@ -59,10 +58,11 @@ for label in 0, 1, 2:
 	except:
 	    continue
 	
-	if train_tmp.shape[0] is 17:
-	    row_count = 1
-	else:
-	    row_count = train_tmp.shape[0]
+        if train_tmp.ndim is 1:
+            row_count = 1
+        else:
+            row_count = len(train_tmp)
+
 
 	train_truth_tmp =  (label + 1) * np.ones(row_count) 
 	train_truth =  np.hstack((train_truth, train_truth_tmp))

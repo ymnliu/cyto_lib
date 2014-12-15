@@ -14,13 +14,13 @@ import matplotlib.patches as mpatches
 from sklearn import mixture
 
 import  load_single_image as ls
-from cyto_util import serialize
+from cyto.util import serialize
 
 import warnings 
 with warnings.catch_warnings():
         warnings.filterwarnings("ignore",category=DeprecationWarning)
 
-n_samples = 300
+n_samples = 3
 label = 0
 idx = 5
 
@@ -54,7 +54,7 @@ for label in range(0, 3):
 
 	    X_train = np.ceil(serialize(subplot_data))
 	    #clf = mixture.DPGMM(n_components=3, covariance_type='full')
-	    clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[2],
+	    clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[1],
 		    n_iter=100)
 	    clf.fit(X_train)
 
@@ -76,7 +76,7 @@ for label in range(0, 3):
 	
 	print "#" * 70
 	print label, idx
-	#print aic_res, bic_res
+	print aic_res, bic_res
 
 	print "argmin:"
 	print np.argmin(aic_res) + 1 , np.argmin(bic_res) + 1
