@@ -1,8 +1,8 @@
+import warnings
+
 import util as cu
-import local_feature
 import feature as cf
 from spot import CytoSpot
-import warnings
 
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=DeprecationWarning)

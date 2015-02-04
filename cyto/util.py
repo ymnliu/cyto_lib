@@ -1,10 +1,12 @@
 import os
 import sys
+from os import walk
+
 import skimage.io
-import cv2
 import numpy as np
 
-from os import listdir, mkdir, walk
+import cv2
+
 
 root = '/home/sijialiu/cyto/data/20140508_CytoImage/'
 
