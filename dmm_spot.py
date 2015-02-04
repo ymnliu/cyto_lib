@@ -14,12 +14,13 @@ import matplotlib.patches as mpatches
 from matplotlib import cm
 from sklearn import mixture
 
-import  load_single_image as ls
+import load_single_image as ls
 from cyto.util import serialize
 from cyto.feature import get_aic_bic_res
 
+
 n_samples = 300
-#label, idx = (2, 6)
+# label, idx = (2, 6)
 label, idx = (1, 8)
 label, idx = (2, 22)
 label, idx = (2, 23)
@@ -42,7 +43,7 @@ spots = img.spots
 subplot_data = spots[0].data.T
 #subplot_data = imgdata.T
 
-ncomponents = 2 
+ncomponents = 2
 
 ctype = ['spherical', 'tied', 'diag', 'full']
 
@@ -55,8 +56,8 @@ X_train = np.floor(serialize(subplot_data))
 print "########################################"
 print X_train
 
-clf = mixture.DPGMM(n_components=ncomponents, covariance_type=ctype[1], n_iter=200, alpha=1., 
-        verbose=True, random_state=20, params='m', init_params='wc', thresh=.00001)
+clf = mixture.DPGMM(n_components=ncomponents, covariance_type=ctype[1], n_iter=200, alpha=1.,
+                    verbose=True, random_state=20, params='m', init_params='wc', thresh=.00001)
 #clf = mixture.VBGMM(n_components=ncomponents, covariance_type=ctype[3], n_iter=10, alpha=1., 
 #        verbose=True, random_state=5, params='wmc', init_params='m')
 #clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[3],
@@ -100,20 +101,19 @@ ax = fig.add_subplot(2, 2, 1)
 #ax.scatter(X_train[:, 0], X_train[:, 1], .8)
 
 truncate_ratio = 2
-thres =  1 / float(truncate_ratio * ncomponents) #0.5 / ncomponents
+thres = 1 / float(truncate_ratio * ncomponents)  # 0.5 / ncomponents
 
 #thres = 0
 print "%d compoents larger than %.2f" % (len(np.argwhere(clf.weights_ > thres)), thres)
 
 for cp_idx in range(0, ncomponents):
-    if clf.weights_[cp_idx] > thres: 
-        
-        str_weight = "%.2f" % clf.weights_[cp_idx] 
-	ax.scatter(clf.means_[cp_idx, 0].T, clf.means_[cp_idx, 1].T, c='r',marker='o')
-	ax.text(clf.means_[cp_idx, 0].T, clf.means_[cp_idx, 1].T, str_weight, color='r' )
+    if clf.weights_[cp_idx] > thres:
+        str_weight = "%.2f" % clf.weights_[cp_idx]
+        ax.scatter(clf.means_[cp_idx, 0].T, clf.means_[cp_idx, 1].T, c='r', marker='o')
+        ax.text(clf.means_[cp_idx, 0].T, clf.means_[cp_idx, 1].T, str_weight, color='r')
 
 CS = ax.contour(X, Y, Z)
-ax.imshow(subplot_data.T, interpolation='none',cmap='gray')
+ax.imshow(subplot_data.T, interpolation='none', cmap='gray')
 
 ax.set_xlabel("(a)")
 ax.set_xticks([])
@@ -131,23 +131,23 @@ ax.set_yticks([])
 
 for spot in spots:
     spot = spots[0]
-    minr = (spot.origin[0] - spot.epd_sz) 
+    minr = (spot.origin[0] - spot.epd_sz)
     maxr = spot.origin[0]
     minc = (spot.origin[1] - spot.epd_sz)
-    maxc = (spot.origin[1] )
-    
-    rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]), 
-	    spot.size[1], spot.size[0],
-	    fill=False, edgecolor='red', linewidth=1)
+    maxc = (spot.origin[1])
+
+    rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
+                              spot.size[1], spot.size[0],
+                              fill=False, edgecolor='red', linewidth=1)
     ax.add_patch(rect)
-    
+
 ax4 = fig.add_subplot(2, 2, 4)
 aic, bic = get_aic_bic_res(spot.data)
 x = np.arange(len(aic)) + 1
 ax4.plot(x, aic, '-')
 ax4.plot(x, bic, 'r-')
 
-ax = fig.add_subplot(2,2,3, projection='3d')
+ax = fig.add_subplot(2, 2, 3, projection='3d')
 
 surf = ax.plot_wireframe(X, Y, Z, cmap=cm.coolwarm, rstride=5, cstride=5)
 

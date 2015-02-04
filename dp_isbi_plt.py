@@ -11,13 +11,11 @@ matrices.
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib import cm
 from sklearn import mixture
 
-import  load_single_image as ls
+import load_single_image as ls
 from cyto.util import serialize
-from cyto.feature import get_aic_bic_res
+
 
 n_samples = 300
 #label, idx = (2, 6)
@@ -47,7 +45,7 @@ spots = img.spots
 subplot_data = spots[0].data
 #subplot_data = imgdata.T
 
-ncomponents = 2 
+ncomponents = 2
 
 ctype = ['spherical', 'tied', 'diag', 'full']
 
