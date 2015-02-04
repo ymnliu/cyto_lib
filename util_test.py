@@ -1,11 +1,9 @@
 import cyto.util as cu
-import matplotlib.pyplot as plt
 
-import os
+for i in 0, 1, 2:
+    cu.gen_all_cyto_list(i)
 
-#for i in 0, 1, 2:
-#    cu.gen_all_cyto_list(i)
-
+'''
 root = '../data_view_eps'
 
 
@@ -34,3 +32,4 @@ for i in 0,1,2:
         plt.imsave(path, img, format='eps', cmap=plt.get_cmap('gray'))
     
 #plt.show()
+'''
