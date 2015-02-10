@@ -31,7 +31,12 @@ class CytoImage:
         return self.data
 
     def cyto_show(self):
-        plt.imshow(self.data)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.imshow(self.data, interpolation='none', cmap='gray')
+        # ax.set_xticks([])
+        # ax.set_yticks([])
+        # ax.invert_yaxis()
         plt.show()
 
     def get_mask(self):
@@ -151,6 +156,7 @@ class CytoImage:
     def get_feature(self):
         return np.array(cf.get_image_feature(self.data))
 
+    """
     def serialize(self):
         data = np.floor(self.masked_data / 100)
         res = np.array([])
@@ -166,3 +172,4 @@ class CytoImage:
             it.iternext()
 
         return res
+    """

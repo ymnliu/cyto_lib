@@ -1,18 +1,19 @@
 import os
 import sys
 from os import walk
+import shutil
 
 import skimage.io
 import numpy as np
-
 import cv2
 
 
-root = '/home/sijialiu/cyto/data/20140508_CytoImage/'
+root = '/home/sijialiu/cyto/data'
 
-img_dir = ['monosomy_05082014', 'disomy_05082014', 'trisomy_05082014']
+img_dirname = ['20140508_CytoImage/monosomy_05082014', '20140508_CytoImage/disomy_05082014',
+               '20140508_CytoImage/trisomy_05082014']
 
-img_dir_list = [root + x for x in img_dir]
+img_dir_list = [root + '/' + x for x in img_dirname]
 
 
 def print_block(str_print):
@@ -27,7 +28,7 @@ def try_image(img_dir, file_list, index):
     filename = file_list[index]
     img_path = img_dir + '/' + filename
     # print 'opening: ' + img_path
-    img = ot.open_cyto_tiff(img_path)
+    img = open_cyto_tiff(img_path)
 
     if img is None:
         print "skip image: " + img_path
@@ -63,7 +64,7 @@ def gen_all_cyto_list(label, list_len=0):
     if list_len is 0:
         list_len = len(f)
 
-    output_name = '../data/' + str(label) + '.dat'
+    output_name = root + '/' + str(label) + '.dat'
     fs = open(output_name, 'w')
 
     processed_count = 0
@@ -81,19 +82,21 @@ def gen_all_cyto_list(label, list_len=0):
             processed_count += 1
             fs.write(img_path + os.linesep)
 
-        sys.stdout.write("Processing: %d%%  \t " %
-                         (100 * processed_count / (list_len - skip_count) + 1))
-        sys.stdout.write("skip rate: %d%%   \r" %
-                         (100 * skip_count / (list_len * 1.)))
+        processed_rate = processed_count / (list_len * 1.)
+        skip_rate = skip_count / (list_len * 1.)
+
+        sys.stdout.write("Processing: %.1f%%\t" % (100 * processed_rate))
+        sys.stdout.write("Skip rate: %.1f%%\r" % (100 * skip_rate))
         sys.stdout.flush()
         count += 1
 
     fs.close()
-    print str(count) + " files are generated."
+    print "%d out of %d files are generated, %.1f%% skipped.\n" % \
+          (processed_count, list_len, 100 * skip_rate)
 
 
 def load_cyto_list(label):
-    list_name = '../data/' + str(label) + '.dat'
+    list_name = root + '/' + str(label) + '.dat'
     return [line.rstrip('\n') for line in open(list_name)]
 
 
@@ -110,11 +113,12 @@ def open_cyto_tiff(path):
         # print "IO Error: skip image: " + path
         return None
 
+
 def open_cyto_tiff_opencv(path):
     im16 = None
     # im_m16 = np.matrix(im16)
     # im_array = np.asarray(im16[:,:])
-    #im16 = skimage.io.imread(path, plugin='freeimage')
+    # im16 = skimage.io.imread(path, plugin='freeimage')
     im16 = cv2.imread(path, 0)
     return im16
 
