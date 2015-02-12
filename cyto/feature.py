@@ -1,31 +1,21 @@
-from util import open_cyto_tiff
-from util import load_cyto_list, serialize
-
 import os
 import sys
-import shutil
-from os import listdir
-from os import mkdir
 from os import walk
-from scipy import misc
 
 from skimage import transform
 from skimage import filter
-from skimage.morphology import erosion, dilation, closing, white_tophat
-from skimage.morphology import black_tophat, skeletonize, convex_hull_image
+from skimage.morphology import dilation
 from skimage.morphology import disk
-
 from sklearn import mixture
+
+from util import open_cyto_tiff
+from util import load_cyto_list, serialize
+
 
 # import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
 
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.misc import imread, imsave
 from scipy import ndimage
-
 
 thres_ratio = .3
 noise_thres_ratio = .5 * thres_ratio
@@ -195,5 +185,10 @@ def get_aic_bic(img):
 
         res_idx += 1
 
-    return np.argmin(aic_res), np.argmin(bic_res)
+    return aic_res, bic_res
     #return np.concatenate(aic_res, bic_res)
+
+
+def get_aic_bic_res(img):
+    aic_res, bic_res = get_aic_bic(img)
+    return np.argmin(aic_res), np.argmin(bic_res)
