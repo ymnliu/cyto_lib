@@ -1,9 +1,8 @@
 import numpy as np
-
 import matplotlib.pyplot as plt
 
 import load_single_image as ls
-from sample_list import overlap_list
+from test.sample_list import overlap_list
 
 
 n_sample = 5

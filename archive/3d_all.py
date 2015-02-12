@@ -1,10 +1,8 @@
+from os import walk
+from datetime import datetime
+
 import fun_3d
 
-import os
-from os import walk
-
-from datetime import datetime
-from time import time
 
 output_dir = 'output_subplot'
 

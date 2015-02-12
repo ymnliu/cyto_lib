@@ -1,21 +1,16 @@
-import os
-import sys
-from os import walk
-
 from skimage import transform
+
 from skimage import filter
 from skimage.morphology import dilation
 from skimage.morphology import disk
 from sklearn import mixture
+import numpy as np
+from scipy import ndimage
 
 from util import open_cyto_tiff
+
 from util import load_cyto_list, serialize
 
-
-# import cv2
-import numpy as np
-
-from scipy import ndimage
 
 thres_ratio = .3
 noise_thres_ratio = .5 * thres_ratio
@@ -79,7 +74,7 @@ def get_image_feature(img):
 feature_dsp = ['Otsu_threshold', 'peak ratio', 'detect number',
                'peak value', 'square sum', 'intensity sum']
 
-
+"""
 def get_features(img_dir, label, sample_len):
     'depreciate method '
     'use load_features instead.'
@@ -120,7 +115,7 @@ def get_features(img_dir, label, sample_len):
         if im16_org is None:
             skip_count = skip_count + 1
             if verbose_flag:
-                print "skip image: " + path
+                print "skip image: " + f[index]
             continue
         else:
             processed_count = processed_count + 1
@@ -133,7 +128,7 @@ def get_features(img_dir, label, sample_len):
             feature_all = np.vstack((feature_all, feature_tmp))
 
     return feature_all
-
+"""
 
 def load_features(label, sample_len):
     f = load_cyto_list(label)[:sample_len]
@@ -173,15 +168,15 @@ def get_aic_bic(img):
         aic_res[res_idx] = clf.aic(X_train)
         bic_res[res_idx] = clf.bic(X_train)
         # print clf.weights_
-        #print clf.means_
-        #print clf.get_params()
-        #	x = np.linspace(0.0, subplot_data.shape[0])
-        #	y = np.linspace(0.0, subplot_data.shape[1])
-        #	X, Y = np.meshgrid(x, y)
-        #	XX = np.c_[X.ravel(), Y.ravel()]
-        #	#Z = np.log(-clf.score_samples(XX)[0])
-        #	Z = np.log(-clf.score_samples(XX)[0])
-        #	Z = Z.reshape(X.shape)
+        # print clf.means_
+        # print clf.get_params()
+        # x = np.linspace(0.0, subplot_data.shape[0])
+        # y = np.linspace(0.0, subplot_data.shape[1])
+        # 	X, Y = np.meshgrid(x, y)
+        # 	XX = np.c_[X.ravel(), Y.ravel()]
+        # 	#Z = np.log(-clf.score_samples(XX)[0])
+        # 	Z = np.log(-clf.score_samples(XX)[0])
+        # 	Z = Z.reshape(X.shape)
 
         res_idx += 1
 

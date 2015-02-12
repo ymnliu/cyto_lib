@@ -1,0 +1,423 @@
+Index: classification.py
+===================================================================
+--- classification.py	(revision f7e9971d562608575bf7af10c63fff9a22808de3)
++++ pyclass/classification.py	(revision )
+@@ -1,28 +1,22 @@
+ #!/usr/bin/env python
+ 
+-import open_cyto_tiff as ot
+-import cyto_feature as cf
+-from cyto_util import print_block
++import time
+ 
+-from sklearn import svm
+-from sklearn.datasets import load_iris
+-from sklearn import ensemble
+ from sklearn.decomposition import PCA
+-
+ import numpy as np
+-import time
+-
+ import matplotlib.pyplot as plt
+-from mpl_toolkits.mplot3d import Axes3D
+ 
++import cyto.feature as cf
++from cyto.util import print_block
++
++
+-localtime = time.asctime( time.localtime(time.time()) )
++localtime = time.asctime(time.localtime(time.time()))
+-print_block("Local current time :" +  localtime)
++print_block("Local current time :" + localtime)
+ 
+-
+-class_count = 3 
++class_count = 3
+-img_dir =[ '../data/monosomy_05082014',
++img_dir = ['../data/monosomy_05082014',
+-	    '../data/disomy_05082014',
+-	    '../data/trisomy_05082014']
++           '../data/disomy_05082014',
++           '../data/trisomy_05082014']
+ 
+ train_size = 100
+ test_size = 4 * train_size
+@@ -43,24 +37,24 @@
+ 
+ # prepare training set
+ for i in range(class_count):
+-    train_tmp = cf.load_features(i , train_size)
++    train_tmp = cf.load_features(i, train_size)
+-    
++
+     train_real_size[i] = train_tmp.shape[0]
+     train_acc += train_real_size[i]
+     train_lim.append(train_acc)
+-    train_truth_tmp =  i  * np.ones(train_real_size[i]) 
++    train_truth_tmp = i * np.ones(train_real_size[i])
+-    train_truth =  np.hstack((train_truth, train_truth_tmp))
++    train_truth = np.hstack((train_truth, train_truth_tmp))
+ 
+     if train.shape[0] is 0:
+-	train = train_tmp
++        train = train_tmp
+     else:
+-	train = np.vstack((train, train_tmp))
++        train = np.vstack((train, train_tmp))
+ 
+ pca = PCA()
+ 
+-pca.fit(train) 
+-print(pca.explained_variance_ratio_) 
+-print(pca.components_) 
++pca.fit(train)
++print(pca.explained_variance_ratio_)
++print(pca.components_)
+ print pca.get_params()
+ 
+ print train.shape
+@@ -81,43 +75,42 @@
+ 
+ color_str = ['rx', 'g^', 'bo']
+ 
+-fig = plt.figure(figsize=(16,8))
++fig = plt.figure(figsize=(16, 8))
+ ax = fig.add_subplot(121, projection='3d')
+ 
+ fid = [3, 4, 5]
+ 
+ d2plot = train
+-for i in range(0, len(train_truth)) :
++for i in range(0, len(train_truth)):
+     color_idx = color_str[int(train_truth[i])]
+-    #plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
++    # plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
+-    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]], 
++    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]],
+-	    c=color_idx[0],  marker=color_idx[1])
++               c=color_idx[0], marker=color_idx[1])
+ 
+-#ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
++# ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
+-plt.title('feature discrimination\n' + 
++plt.title('feature discrimination\n' +
+-	    str([cf.feature_dsp[x] for x in fid ]))
++          str([cf.feature_dsp[x] for x in fid]))
+-print [cf.feature_dsp[x] for x in fid ]
++print [cf.feature_dsp[x] for x in fid]
+ print fid
+ ax.set_xlabel(cf.feature_dsp[fid[0]])
+ ax.set_ylabel(cf.feature_dsp[fid[1]])
+ ax.set_zlabel(cf.feature_dsp[fid[2]])
+-
+ 
+ ax = fig.add_subplot(122, projection='3d')
+ 
+ fid = [0, 1, 2]
+ 
+ d2plot = pca.transform(train)
+-for i in range(0, len(train_truth)) :
++for i in range(0, len(train_truth)):
+     color_idx = color_str[int(train_truth[i])]
+-    #plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
++    # plt.plot(d2plot[i][0], d2plot[i][4], color_idx)
+-    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]], 
++    ax.scatter(d2plot[i][fid[0]], d2plot[i][fid[1]], d2plot[i][fid[2]],
+-	    c=color_idx[0],  marker=color_idx[1])
++               c=color_idx[0], marker=color_idx[1])
+ 
+-#ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
++# ax.legend([p[0], p[1], p[2]], ["monosomy", "disomy", "trisomy"])
+-plt.title('After PCA\n' + 
++plt.title('After PCA\n' +
+-	    str([cf.feature_dsp[x] for x in fid ]))
++          str([cf.feature_dsp[x] for x in fid]))
+-print [cf.feature_dsp[x] for x in fid ]
++print [cf.feature_dsp[x] for x in fid]
+ print fid
+ ax.set_xlabel(cf.feature_dsp[fid[0]])
+ ax.set_ylabel(cf.feature_dsp[fid[1]])
+Index: monosomy_feature.py
+===================================================================
+--- monosomy_feature.py	(revision f7e9971d562608575bf7af10c63fff9a22808de3)
++++ pyclass/monosomy_feature.py	(revision )
+@@ -1,19 +1,19 @@
+-import cyto.feature as cf
+-from cyto.util import print_block, load_cyto_list, open_cyto_tiff
++import time
+ 
++import numpy as np
++
++import cyto.util as cu
++import cyto.feature as cf
++from cyto.util import print_block, load_cyto_list
+ from cyto.image import CytoImage
++from pyclass import train_test
+ 
+-import train_test
+-import numpy as np
+-import time
+ 
+-localtime = time.asctime( time.localtime(time.time()) )
++localtime = time.asctime(time.localtime(time.time()))
+-print_block("Local current time :" +  localtime)
++print_block("Local current time :" + localtime)
+ 
+-class_count = 3 
++class_count = 3
+-img_dir =[ '../data/monosomy_05082014',
+-	    '../data/disomy_05082014',
+-	    '../data/trisomy_05082014']
++img_dir = cu.img_dir_list
+ 
+ train_size = 50
+ 
+@@ -27,10 +27,11 @@
+ 
+ res = np.zeros((3, 3))
+ 
++pre_list = [0]
+ 
+ # prepare training set
+-for label in 0:
++for label in pre_list:
+-    #train_tmp = cf.get_features(img_dir[label], label + 1, train_size)
++    # train_tmp = cf.get_features(img_dir[label], label + 1, train_size)
+ 
+     sample_len = train_size
+     f = load_cyto_list(label)[:sample_len]
+@@ -38,14 +39,14 @@
+     feature_all = np.array([])
+ 
+     for img_path in f:
+-	#im16_org = open_cyto_tiff(img_path)
++        # im16_org = open_cyto_tiff(img_path)
+-	
+-	c_img = CytoImage(img_path)	
++
++        c_img = CytoImage(img_path)
+-	#train_tmp = c_img.get_spots_feature()  
++        # train_tmp = c_img.get_spots_feature()
+         spots = c_img.get_cyto_spots()
+-        
++
+         spot_count = 0
+-	
++
+         for spot in spots:
+             #feature_tmp = cf.get_gmm_selection(spot.data)
+             feature_tmp = cf.get_gmm_matrix(spot.data)
+@@ -54,29 +55,28 @@
+                 spot_count += feature_tmp[0]
+             else:
+                 spot_count += np.sum(feature_tmp)[0]
+-            
+-             
++
+             #print feature_tmp
+             if feature_all.shape[0] is 0:
+                 feature_all = np.asarray(feature_tmp)
+             else:
+                 feature_all = np.vstack((feature_all, feature_tmp))
+-    
++
+         if spot_count >= 3:
+             spot_count = 3
+ 
+-        res[label][spot_count - 1] += 1 
++        res[label][spot_count - 1] += 1
+-    train_tmp  = feature_all
++    train_tmp = feature_all
+ 
+     #train_tmp = cf.load_features(label, train_size)
+     train_real_size[label] = train_tmp.shape[0]
+-    train_truth_tmp =  (label + 1) * np.ones(train_real_size[label]) 
++    train_truth_tmp = (label + 1) * np.ones(train_real_size[label])
+-    train_truth =  np.hstack((train_truth, train_truth_tmp))
++    train_truth = np.hstack((train_truth, train_truth_tmp))
+ 
+     if train.shape[0] is 0:
+-	train = train_tmp
++        train = train_tmp
+     else:
+-	train = np.vstack((train, train_tmp))
++        train = np.vstack((train, train_tmp))
+ 
+ 
+ ######################################################################
+@@ -84,8 +84,8 @@
+ ######################################################################
+ 
+ row_means = np.mean(train, axis=0)
+-#row_std = np.std(train, axis=0)
++# row_std = np.std(train, axis=0)
+-train_norm = (train / row_means) 
++train_norm = (train / row_means)
+ 
+ train = train_norm
+ 
+Index: class_test.py
+===================================================================
+--- class_test.py	(revision f7e9971d562608575bf7af10c63fff9a22808de3)
++++ pyclass/class_test.py	(revision )
+@@ -2,8 +2,6 @@
+ 
+ from cyto_image import CytoImage
+ 
+-import numpy
+-
+ path = "../data/disomy_05082014/5537_Ch3.ome.tif"
+ 
+ img = CytoImage(path)
+Index: pyclass/train_test.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pyclass/train_test.py	(revision )
++++ pyclass/train_test.py	(revision )
+@@ -0,0 +1,78 @@
++from sklearn import ensemble
++from sklearn import tree
++from sklearn import svm
++from sklearn.naive_bayes import GaussianNB
++
++from sklearn.cross_validation import cross_val_score, train_test_split
++from sklearn.metrics import confusion_matrix
++
++import matplotlib.pyplot as plt
++
++import numpy as np
++
++
++def classifier_scores(train, train_truth, nfolds=10):
++    res_mean = []
++    res_std = []
++
++    clf_list = [('AdaBoost', ensemble.AdaBoostClassifier(n_estimators=100)),
++                ('Random Forest', ensemble.RandomForestClassifier()),
++                ('SVM', svm.LinearSVC()),
++                ('DT', tree.DecisionTreeClassifier()),
++                ('GaussianNB', GaussianNB())]
++
++    classifier_func_score(clf_list, train, train_truth, nfolds)
++
++
++"""
++    print "Mean:"
++    print "%.2f, "*len(res_mean) % tuple(res_mean)
++
++    print "Std"
++    print "%.2f, "*len(res_std) % tuple(res_std)
++"""
++
++
++def show_confusion_matrix(X, y):
++    """docstring for show_confusion_matrix"""
++
++    print "show matrix..."
++    # Split the data into a training set and a test set
++    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0, test_size=.1)
++
++    print "running classifier...."
++    # Run classifier
++    classifier = svm.SVC()
++    y_pred = classifier.fit(X_train, y_train).predict(X_test)
++
++    print "compute confusion matrix..."
++    # Compute confusion matrix
++    cm = confusion_matrix(y_test, y_pred)
++
++    cm_sum = np.sum(cm, axis=1).T
++
++    cm_ratio = cm / cm_sum.astype(float)[:, np.newaxis]
++
++    print(cm_ratio)
++    print cm
++    print cm_sum
++
++    print "plot matrix..."
++    # Show confusion matrix in a separate window
++    plt.matshow(cm_ratio)
++    plt.title('Confusion matrix')
++    plt.colorbar()
++    plt.ylabel('True label')
++    plt.xlabel('Predicted label')
++    plt.show()
++
++
++def classification_eval(train, train_truth, nfolds=3):
++    classifier_scores(train, train_truth, nfolds)
++    show_confusion_matrix(train, train_truth)
++
++
++def classifier_func_score(_clf_list, train, train_truth, nfolds):
++    for (desp, clf) in _clf_list:
++        scores = cross_val_score(clf, train, train_truth, cv=nfolds)
++        print("Accuracy %s: %0.2f (+/- %0.2f)" % (desp, scores.mean(), scores.std()))
+\ No newline at end of file
+Index: shuffle_classification_test.py
+===================================================================
+--- shuffle_classification_test.py	(revision f7e9971d562608575bf7af10c63fff9a22808de3)
++++ pyclass/shuffle_classification_test.py	(revision )
+@@ -1,17 +1,14 @@
+ #!/usr/bin/env python
+ 
+-import cyto.feature as cf
+-from cyto.util import print_block, load_cyto_list, open_cyto_tiff
++import time
++from random import shuffle
+ 
+-from cyto.image import CytoImage
+-
+-from sklearn import svm
+-from sklearn.datasets import load_iris
+ from sklearn import ensemble
+-
+ import numpy as np
+-import time
+-from random import shuffle
++
++from cyto.util import print_block, load_cyto_list
++from cyto.image import CytoImage
++
+ 
+ localtime = time.asctime( time.localtime(time.time()) )
+ print_block("Local current time :" +  localtime)
+Index: pyclass/__init__.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pyclass/__init__.py	(revision )
++++ pyclass/__init__.py	(revision )
+@@ -0,0 +1,1 @@
++__author__ = 'sijialiu'
+Index: shuffle.py
+===================================================================
+--- shuffle.py	(revision f7e9971d562608575bf7af10c63fff9a22808de3)
++++ pyclass/shuffle.py	(revision )
+@@ -1,17 +1,14 @@
+ #!/usr/bin/env python
+ 
+-import cyto.feature as cf
+-from cyto.util import print_block, load_cyto_list, open_cyto_tiff
++import time
++from random import shuffle
+ 
+-from cyto.image import CytoImage
+-
+-from sklearn import svm
+-from sklearn.datasets import load_iris
+ from sklearn import ensemble
+-
+ import numpy as np
+-import time
+-from random import shuffle
++
++from cyto.util import print_block, load_cyto_list
++from cyto.image import CytoImage
++
+ 
+ localtime = time.asctime( time.localtime(time.time()) )
+ print_block("Local current time :" +  localtime)

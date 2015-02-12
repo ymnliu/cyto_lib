@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
-from cyto.util import open_cyto_tiff as ot
-from cyto.util import print_block, load_cyto_list
-
-from cyto.image import CytoImage
-
-import train_test
+import time
 
 import numpy as np
-import time
+
+from cyto.util import print_block, load_cyto_list
+from cyto.image import CytoImage
+from pyclass import train_test
 
 localtime = time.asctime( time.localtime(time.time()) )
 print_block("Local current time :" +  localtime)

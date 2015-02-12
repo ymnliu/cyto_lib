@@ -1,11 +1,11 @@
-from matplotlib import pyplot as plt
-from skimage import data
-from skimage.feature import blob_dog, blob_log, blob_doh
 from math import sqrt
-from skimage.color import rgb2gray
+
+from matplotlib import pyplot as plt
+from skimage.feature import blob_dog, blob_log, blob_doh
 import numpy as np
 
 from load_single_image import load_single_image
+
 
 #image = data.hubble_deep_field()[0:500, 0:500]
 #image_gray = rgb2gray(image)

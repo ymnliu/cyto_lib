@@ -1,12 +1,10 @@
-import os
-from os import listdir
-from os import mkdir
 from os import walk
 
 import cv2
+
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.misc import imread, imsave
+
 f = []
 i = 0
 

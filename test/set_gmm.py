@@ -1,6 +1,6 @@
 import numpy as np
 
-import train_test
+from pyclass import train_test
 from plot import gen_set_gmm
 
 
@@ -8,9 +8,10 @@ def unique_rows(data):
     uniq = np.unique(data.view(data.dtype.descr * data.shape[1]))
     return uniq.view(data.dtype).reshape(-1, data.shape[1])
 
-from sample_list import overlap_list
 
-n_sample =  50 
+from test.sample_list import overlap_list
+
+n_sample = 50
 n_bins = 30 
 l_bins = [5*i for i in range(1, 9)] 
 

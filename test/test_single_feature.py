@@ -1,11 +1,12 @@
-import cyto.feature as cf
-from cyto.util import print_block, load_cyto_list, open_cyto_tiff
-
-from cyto.image import CytoImage
-
-import train_test
-import numpy as np
 import time
+
+import numpy as np
+
+import cyto.feature as cf
+from cyto.util import print_block, load_cyto_list
+from cyto.image import CytoImage
+from pyclass import train_test
+
 
 localtime = time.asctime( time.localtime(time.time()) )
 print_block("Local current time :" +  localtime)
@@ -26,10 +27,10 @@ test_truth = []
 print_block("Loading data")
 
 res = np.zeros((3, 3))
-
+spot_res = np.zeros((3, 3))
 
 # prepare training set
-for label in 0:
+for label in 0, 1, 2:
     #train_tmp = cf.get_features(img_dir[label], label + 1, train_size)
 
     sample_len = train_size
@@ -65,7 +66,14 @@ for label in 0:
         if spot_count >= 3:
             spot_count = 3
 
+        len_spots= len(spots)
+         
+        if len_spots >= 3:
+            len_spots = 3
+
         res[label][spot_count - 1] += 1 
+        spot_res[label][len_spots - 1] += 1 
+
     train_tmp  = feature_all
 
     #train_tmp = cf.load_features(label, train_size)
@@ -96,3 +104,4 @@ train = train_norm
 train_test.classification_val(train, train_truth)
 
 print res
+print spot_res

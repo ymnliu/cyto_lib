@@ -1,15 +1,12 @@
+import numpy as np
+
+import matplotlib.pyplot as plt
+from skimage.filter import gabor_kernel
+from skimage import data
 
 from load_single_image import load_single_image
-import numpy as np
-import matplotlib.pyplot as plt
 
-from mpl_toolkits.mplot3d import Axes3D
 
-from skimage.filter import gabor_kernel
-from skimage.feature import hog
-from skimage import data, color, exposure
-
-from scipy import ndimage as nd
 
 ############################################################################
 ##      function def

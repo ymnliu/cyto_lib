@@ -1,5 +1,4 @@
 import os
-from os import listdir
 from os import walk
 from os import mkdir
 import sys
@@ -7,7 +6,8 @@ import sys
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.misc import imread, imsave
+
+
 f = []
 arg =  sys.argv
 print arg, len(arg)
@@ -50,9 +50,7 @@ if False:
 #################################################
 #   display 3d
 ################################################
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -1,27 +1,18 @@
 #!/usr/bin/env python
 
-import open_cyto_tiff as ot
-
 import os
 import sys
-import shutil
-from os import listdir
 from os import mkdir
 from os import walk
-from scipy import misc 
 
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
-
-from mpl_toolkits.mplot3d import Axes3D
-from scipy.misc import imread, imsave
 from scipy import ndimage
 
+import open_cyto_tiff as ot
 import mahotas
 import pymorph as pm
-import pylab
 
 
 f = []
