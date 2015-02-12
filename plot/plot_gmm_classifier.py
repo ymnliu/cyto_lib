@@ -51,6 +51,7 @@ def make_ellipses(gmm, ax):
         ell.set_alpha(0.5)
         ax.add_artist(ell)
 
+
 iris = datasets.load_iris()
 
 # Break up the dataset into non-overlapping training (75%) and testing
@@ -58,7 +59,6 @@ iris = datasets.load_iris()
 skf = StratifiedKFold(iris.target, n_folds=4)
 # Only take the first fold.
 train_index, test_index = next(iter(skf))
-
 
 X_train = iris.data[train_index]
 y_train = iris.target[train_index]
@@ -69,7 +69,7 @@ n_classes = len(np.unique(y_train))
 
 # Try GMMs using different types of covariances.
 classifiers = dict((covar_type, GMM(n_components=n_classes,
-                    covariance_type=covar_type, init_params='wc', n_iter=20))
+                                    covariance_type=covar_type, init_params='wc', n_iter=20))
                    for covar_type in ['spherical', 'diag', 'tied', 'full'])
 
 n_classifiers = len(classifiers)
@@ -77,7 +77,6 @@ n_classifiers = len(classifiers)
 plt.figure(figsize=(3 * n_classifiers / 2, 6))
 plt.subplots_adjust(bottom=.01, top=0.95, hspace=.15, wspace=.05,
                     left=.01, right=.99)
-
 
 for index, (name, classifier) in enumerate(classifiers.items()):
     # Since we have class labels for the training data, we can
@@ -115,6 +114,5 @@ for index, (name, classifier) in enumerate(classifiers.items()):
     plt.title(name)
 
 plt.legend(loc='lower right', prop=dict(size=12))
-
 
 plt.show()

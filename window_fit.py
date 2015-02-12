@@ -1,13 +1,5 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib import cm
-from sklearn import mixture
-
 import  load_single_image as ls
-from cyto.util import serialize, print_block
-from cyto.feature import get_aic_bic_res
-import gaussian_window as gw 
+from plot import gaussian_window as gw
 
 n_samples = 300
 #label, idx = (2, 6)

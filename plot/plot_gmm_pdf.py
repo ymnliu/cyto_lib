@@ -12,17 +12,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import mixture
 
-import  load_single_image as ls
-
 n_samples = 300
 
-#lsdata = ls.data
+# lsdata = ls.data
 #imgdata = ls.img.data
 # generate random sample, two components
 np.random.seed(0)
 C = np.array([[0., -0.7], [3.5, .7]])
 X_train_decimal = np.r_[np.dot(np.random.randn(n_samples, 2), C),
-                np.random.randn(n_samples, 2) + np.array([20, 20])]
+                        np.random.randn(n_samples, 2) + np.array([20, 20])]
 #X_train = np.ceil(lsdata)
 X_train = X_train_decimal
 
@@ -50,14 +48,14 @@ ax = fig.add_subplot(1, 2, 1, aspect='equal')
 CS = ax.contour(X, Y, Z)
 #CB = ax.colorbar(CS, shrink=0.8, extend='both')
 ax.scatter(X_train[:, 0], X_train[:, 1], .8)
-ax.scatter(clf.means_[:, 0].T, clf.means_[:, 1].T, c='r',marker='o')
+ax.scatter(clf.means_[:, 0].T, clf.means_[:, 1].T, c='r', marker='o')
 ax.set_xlabel("(a)")
 ax.set_xticks([])
 ax.set_yticks([])
 ax.invert_yaxis()
 
 ax = fig.add_subplot(1, 2, 2, aspect='equal')
-ax.scatter(clf.means_[:, 0].T, clf.means_[:, 1].T, c='r',marker='o')
+ax.scatter(clf.means_[:, 0].T, clf.means_[:, 1].T, c='r', marker='o')
 #ax.imshow(ls.img.data.T, interpolation='nearest')
 #ax.set_title(str(clf.n_components))
 ax.set_xlabel("(b)")

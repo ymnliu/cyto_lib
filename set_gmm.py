@@ -1,16 +1,8 @@
-import itertools
-
 import numpy as np
-from scipy import linalg
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 
-from sklearn import mixture
-
-import  load_single_image as ls
 import train_test
+from plot import gen_set_gmm
 
-from gen_set_gmm import gen_set_gmm
 
 def unique_rows(data):
     uniq = np.unique(data.view(data.dtype.descr * data.shape[1]))

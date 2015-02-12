@@ -8,17 +8,17 @@ generated from two gaussians with different centers and covariance
 matrices.
 """
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from sklearn import mixture
 
-import  load_single_image as ls
+import load_single_image as ls
 from cyto.util import serialize
 
-import warnings 
 with warnings.catch_warnings():
-        warnings.filterwarnings("ignore",category=DeprecationWarning)
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 n_samples = 3
 label = 0
@@ -30,67 +30,65 @@ res_list = []
 for label in range(0, 3):
     for idx in range(0, 10):
 
-	try:
-	    lsdata, img = ls.load_single_image(label, idx)
-	except:
-	    print label, idx 
-	    print "skiped. "
-	    continue
+        try:
+            lsdata, img = ls.load_single_image(label, idx)
+        except:
+            print label, idx
+            print "skiped. "
+            continue
 
-	imgdata = img.data
-	spots = img.spots
+        imgdata = img.data
+        spots = img.spots
 
-	#subplot_data = spots[0].data.T
-	subplot_data = imgdata
+        # subplot_data = spots[0].data.T
+        subplot_data = imgdata
 
-	ctype = ['spherical', 'tied', 'diag', 'full']
+        ctype = ['spherical', 'tied', 'diag', 'full']
 
-	aic_res = np.zeros(5)
-	bic_res = np.zeros(5)
+        aic_res = np.zeros(5)
+        bic_res = np.zeros(5)
 
-	res_idx = 0
+        res_idx = 0
 
-	for ncomponents in range(1, 6):
+        for ncomponents in range(1, 6):
+            X_train = np.ceil(serialize(subplot_data))
+            # clf = mixture.DPGMM(n_components=3, covariance_type='full')
+            clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[1],
+                              n_iter=100)
+            clf.fit(X_train)
 
-	    X_train = np.ceil(serialize(subplot_data))
-	    #clf = mixture.DPGMM(n_components=3, covariance_type='full')
-	    clf = mixture.GMM(n_components=ncomponents, covariance_type=ctype[1],
-		    n_iter=100)
-	    clf.fit(X_train)
+            aic_res[res_idx] = clf.aic(X_train)
+            bic_res[res_idx] = clf.bic(X_train)
+            # print clf.weights_
+            # print clf.means_
+            #print clf.get_params()
+            x = np.linspace(0.0, subplot_data.shape[0])
+            y = np.linspace(0.0, subplot_data.shape[1])
+            X, Y = np.meshgrid(x, y)
+            XX = np.c_[X.ravel(), Y.ravel()]
+            #Z = np.log(-clf.score_samples(XX)[0])
+            Z = np.log(-clf.score_samples(XX)[0])
+            Z = Z.reshape(X.shape)
 
-	    aic_res[res_idx] = clf.aic(X_train)
-	    bic_res[res_idx] = clf.bic(X_train)
-	    #print clf.weights_
-	    #print clf.means_
-	    #print clf.get_params()
-	    x = np.linspace(0.0, subplot_data.shape[0])
-	    y = np.linspace(0.0, subplot_data.shape[1])
-	    X, Y = np.meshgrid(x, y)
-	    XX = np.c_[X.ravel(), Y.ravel()]
-	    #Z = np.log(-clf.score_samples(XX)[0])
-	    Z = np.log(-clf.score_samples(XX)[0])
-	    Z = Z.reshape(X.shape)
+            res_idx += 1
 
-	    res_idx += 1
-    
-	
-	print "#" * 70
-	print label, idx
-	print aic_res, bic_res
+        print "#" * 70
+        print label, idx
+        print aic_res, bic_res
 
-	print "argmin:"
-	print np.argmin(aic_res) + 1 , np.argmin(bic_res) + 1
-	print "num components"
-	print img.get_n_component()
-	res_list.append((label + 1, idx, np.argmin(aic_res) + 1,
-	    np.argmin(bic_res) + 1, img.get_n_component()))
+        print "argmin:"
+        print np.argmin(aic_res) + 1, np.argmin(bic_res) + 1
+        print "num components"
+        print img.get_n_component()
+        res_list.append((label + 1, idx, np.argmin(aic_res) + 1,
+                         np.argmin(bic_res) + 1, img.get_n_component()))
 
-	fig = plt.figure()
-	ax = fig.add_subplot(1, 2, 1, aspect='equal')
-	ax.imshow(subplot_data)
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 2, 1, aspect='equal')
+        ax.imshow(subplot_data)
 
 print '\n'.join(map(str, res_list))
-#plt.show()
+# plt.show()
 
 
 '''

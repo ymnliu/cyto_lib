@@ -1,57 +1,64 @@
 """
-=================================
-Gaussian Mixture Model Selection
-=================================
+=============================================
+Density Estimation for a mixture of Gaussians
+=============================================
 
-This example shows that model selection can be performed with
-Gaussian Mixture Models using information-theoretic criteria (BIC).
-Model selection concerns both the covariance type
-and the number of components in the model.
-In that case, AIC also provides the right result (not shown to save time),
-but BIC is better suited if the problem is to identify the right model.
-Unlike Bayesian procedures, such inferences are prior-free.
-
-In that case, the model with 2 components and full covariance
-(which corresponds to the true generative model) is selected.
+Plot the density estimation of a mixture of two Gaussians. Data is
+generated from two Gaussians with different centers and covariance
+matrices.
 """
-print(__doc__)
 
 import itertools
 
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+from sklearn import mixture
+
+
+n_samples = 300
+
+# generate random sample, two components
+np.random.seed(0)
+
+# generate spherical data centered on (20, 20)
+# shifted_gaussian = np.random.randn(n_samples, 2) + np.array([20, 20])
+shifted_gaussian = np.random.randn(n_samples, 2) + np.array([0, 0])
+
+# generate zero centered stretched Gaussian data
+#C = np.array([[0., -0.7], [3.5, .7]])
+C = np.array([[0., -0.7], [3.5, .7]])
+stretched_gaussian = np.dot(np.random.randn(n_samples, 2), C)
+
+# concatenate the two datasets into the final training set
+X_train = np.vstack([shifted_gaussian, stretched_gaussian])
+
+# fit a Gaussian Mixture Model with two components
+clf = mixture.GMM(n_components=2, covariance_type='full')
+clf.fit(X_train)
+
+# display predicted scores by the model as a contour plot
+x = np.linspace(-20.0, 30.0)
+y = np.linspace(-20.0, 40.0)
+X, Y = np.meshgrid(x, y)
+XX = np.array([X.ravel(), Y.ravel()]).T
+Z = -clf.score_samples(XX)[0]
+Z = Z.reshape(X.shape)
+
+CS = plt.contour(X, Y, Z, norm=LogNorm(vmin=1.0, vmax=1000.0),
+                 levels=np.logspace(0, 3, 10))
+CB = plt.colorbar(CS, shrink=0.8, extend='both')
+plt.scatter(X_train[:, 0], X_train[:, 1], .8)
+
+plt.title('Negative log-likelihood predicted by a GMM')
+plt.axis('tight')
+plt.show()
+
 from scipy import linalg
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from sklearn import mixture
-
-import  load_single_image as ls
-from cyto.util import serialize
-from cyto.feature import get_aic_bic_res
-
-n_samples = 300
-label, idx = (2, 6)
-label, idx = (1, 8)
-#label, idx = (1, 8)
-label, idx = (2, 505)
-#label, idx = (2, 400)
-#label, idx = (2, 300)
-#label, idx = (0, 200)
-
-img = ls.load_single_image(label, idx)
-
-img.show_each_spot()
-img.show_each_spot()
-
-imgdata = img.data
-spots = img.spots
-
-subplot_data = spots[0].data.T
-#subplot_data = imgdata.T
-
-ctype = ['spherical', 'tied', 'diag', 'full']
-
-X = np.floor(serialize(subplot_data))
+X = X_train
 
 lowest_bic = np.infty
 bic = []
@@ -77,13 +84,13 @@ spl = plt.subplot(2, 1, 1)
 for i, (cv_type, color) in enumerate(zip(cv_types, color_iter)):
     xpos = np.array(n_components_range) + .2 * (i - 2)
     bars.append(plt.bar(xpos, bic[i * len(n_components_range):
-                                  (i + 1) * len(n_components_range)],
+    (i + 1) * len(n_components_range)],
                         width=.2, color=color))
 plt.xticks(n_components_range)
 plt.ylim([bic.min() * 1.01 - .01 * bic.max(), bic.max()])
 plt.title('BIC score per model')
-xpos = np.mod(bic.argmin(), len(n_components_range)) + .65 +\
-    .2 * np.floor(bic.argmin() / len(n_components_range))
+xpos = np.mod(bic.argmin(), len(n_components_range)) + .65 + \
+       .2 * np.floor(bic.argmin() / len(n_components_range))
 plt.text(xpos, bic.min() * 0.97 + .03 * bic.max(), '*', fontsize=14)
 spl.set_xlabel('Number of components')
 spl.legend([b[0] for b in bars], cv_types)
@@ -96,8 +103,7 @@ for i, (mean, covar, color) in enumerate(zip(clf.means_, clf.covars_,
     print covar.shape
     print clf.covars_[i]
     if covar.ndim is 1:
-        covar =  np.array([[covar[0], 0.], [0., covar[1]]])
-
+        covar = np.array([[covar[0], 0.], [0., covar[1]]])
 
     v, w = linalg.eigh(covar)
     if not np.any(Y_ == i):

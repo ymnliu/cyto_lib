@@ -26,15 +26,13 @@ import numpy as np
 from scipy import linalg
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
 from sklearn import mixture
 
-import  load_single_image as ls
+import load_single_image as ls
 from cyto.util import serialize
-from cyto.feature import get_aic_bic_res
 
 n_samples = 300
-#label, idx = (2, 6, 0)
+# label, idx = (2, 6, 0)
 label, idx, spot_idx = (1, 8, 0)
 #label, idx = (2, 22, 0)
 label, idx, spot_idx = (2, 23, 0)
@@ -53,16 +51,15 @@ overlap_list = [(1, 8, 0),
                 (1, 8, 0),
                 (2, 55, 0)]
 
-non_overlap_list = [(0,0,0),
-                    (0,1,0),
-                    (0,2,0),
-                    (0,3,0),
-                    (0,4,0),
-                    (0,5,0)]
+non_overlap_list = [(0, 0, 0),
+                    (0, 1, 0),
+                    (0, 2, 0),
+                    (0, 3, 0),
+                    (0, 4, 0),
+                    (0, 5, 0)]
 
 label, idx, spot_idx = overlap_list[2]
 label, idx, spot_idx = non_overlap_list[1]
-
 
 img = ls.load_single_image(label, idx)
 
@@ -88,8 +85,8 @@ gmm = mixture.GMM(n_components=n_components, covariance_type='full')
 gmm.fit(X)
 
 # Fit a Dirichlet process mixture of Gaussians using five components
-dpgmm = mixture.DPGMM(n_components=n_components, covariance_type=ctype[2], alpha=5.12, 
-        params='wmc', n_iter=1000)
+dpgmm = mixture.DPGMM(n_components=n_components, covariance_type=ctype[2], alpha=5.12,
+                      params='wmc', n_iter=1000)
 dpgmm.fit(X)
 
 print dpgmm.n_components
@@ -118,17 +115,16 @@ for i, (clf, title) in enumerate([(gmm, 'GMM'),
         ell.set_alpha(0.5)
         splot.add_artist(ell)
 
-#    plt.xlim(-10, 10)
-#    plt.ylim(-3, 6)
+    # plt.xlim(-10, 10)
+    # plt.ylim(-3, 6)
     plt.xticks(())
     plt.yticks(())
     #plt.title(title)
 
     plt.title("%d, %d, %d" % (label, idx, spot_idx))
-    
+
     print title
     print clf.eval(X)
     print ""
-
 
 plt.show()

@@ -26,13 +26,10 @@ import numpy as np
 from scipy import linalg
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
 from sklearn import mixture
 
-
-import  load_single_image as ls
+import load_single_image as ls
 from cyto.util import serialize
-from cyto.feature import get_aic_bic_res
 from cyto.spot import CytoSpot
 
 
@@ -42,7 +39,6 @@ def unique_rows(data):
 
 
 def gen_set_gmm(sid, category):
-    
     label, idx, spot_idx = sid
     img = ls.load_single_image(label, idx)
 
@@ -53,7 +49,7 @@ def gen_set_gmm(sid, category):
     spots = img.spots
 
     subplot_data = spots[spot_idx].data.T
-    #subplot_data = imgdata.T
+    # subplot_data = imgdata.T
 
     n_components = 2
 
@@ -68,8 +64,8 @@ def gen_set_gmm(sid, category):
     gmm.fit(X)
 
     # Fit a Dirichlet process mixture of Gaussians using five components
-    dpgmm = mixture.DPGMM(n_components=n_components, covariance_type=ctype[2], alpha=5.12, 
-            params='wmc', n_iter=1000)
+    dpgmm = mixture.DPGMM(n_components=n_components, covariance_type=ctype[2], alpha=5.12,
+                          params='wmc', n_iter=1000)
     dpgmm.fit(X)
 
     print dpgmm.n_components
@@ -85,16 +81,16 @@ def gen_set_gmm(sid, category):
     #for s_i, (clf, title) in enumerate([(gmm, 'GMM'),
     #                                  (dpgmm, 'Dirichlet Process GMM')]):
     for s_i, (clf, title) in enumerate([(dpgmm, 'Dirichlet Process GMM')]):
-        fig = plt.figure(figsize=(1,4))
+        fig = plt.figure(figsize=(1, 4))
         splot = plt.subplot(s_nrows, s_ncols, 1 + s_i)
         Y_ = clf.predict(X)
-        
+
         log_mat = np.zeros(subplot_data.shape)
         rsp_mat = np.zeros(subplot_data.shape)
-	
+
         spot = CytoSpot(subplot_data)
         train_tmp = spot.get_features()
-        
+
         for i, (mean, covar, color) in enumerate(zip(
                 clf.means_, clf._get_covars(), color_iter)):
             v, w = linalg.eigh(covar)
@@ -114,14 +110,14 @@ def gen_set_gmm(sid, category):
             ell.set_alpha(0.5)
             splot.add_artist(ell)
 
-    #    plt.xlim(-10, 10)
-    #    plt.ylim(-3, 6)
+            # plt.xlim(-10, 10)
+            # plt.ylim(-3, 6)
         plt.xticks(())
         plt.yticks(())
         #plt.title(title)
 
         plt.title("%d, %d, %d" % (label, idx, spot_idx))
-        
+
         #print title
         logprob, responsibility = clf.score_samples(X)
         #print logprob 
@@ -134,9 +130,9 @@ def gen_set_gmm(sid, category):
             log_mat[x, y] = logprob[j] * -1.
             #rsp_mat[x, y] = responsibility[j][0] / responsibility[j][1] 
             #rsp_mat[x, y] = np.abs(responsibility[j][0] - responsibility[j][1] )
-            rsp_mat[x, y] = np.std(responsibility[j] )
+            rsp_mat[x, y] = np.std(responsibility[j])
 
-    #    print log_mat
+            # print log_mat
         splot = plt.subplot(s_nrows, s_ncols, 2 + s_i)
         imgplot = plt.imshow(log_mat)
         imgplot.set_interpolation('nearest')
@@ -153,7 +149,7 @@ def gen_set_gmm(sid, category):
         plt.yticks(())
 
     splot = plt.subplot(s_nrows, s_ncols, 4)
-    plt.imshow(subplot_data.T, interpolation='none',cmap='gray')
+    plt.imshow(subplot_data.T, interpolation='none', cmap='gray')
     #plt.imshow(subplot_data)
     plt.xticks(())
     plt.yticks(())
