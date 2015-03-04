@@ -10,7 +10,8 @@ import cv2
 
 root = '/home/sijialiu/cyto/data'
 
-img_dirname = ['20140508_CytoImage/monosomy_05082014', '20140508_CytoImage/disomy_05082014',
+img_dirname = ['20140508_CytoImage/monosomy_05082014',
+               '20140508_CytoImage/disomy_05082014',
                '20140508_CytoImage/trisomy_05082014']
 
 img_dir_list = [root + '/' + x for x in img_dirname]
@@ -124,7 +125,7 @@ def open_cyto_tiff_opencv(path):
 
 
 def serialize(_data):
-    data = np.floor(_data / 100)
+    data = np.floor(_data / 200)
     res = np.array([])
     it = np.nditer(data, flags=['multi_index'])
     while not it.finished:
@@ -139,3 +140,12 @@ def serialize(_data):
 
     return res
 
+
+def show_progress(prefix_str, process, total):
+    processed_rate = process / (1. * total)
+    if process > total - 1:
+        print prefix_str + " Complete!"
+    else:
+        display_str = prefix_str + ": %.1f%%\r"
+        sys.stdout.write(display_str % (100 * processed_rate))
+        sys.stdout.flush()

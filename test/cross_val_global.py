@@ -7,5 +7,9 @@ from cyto.helper import prepare_train_data
 ##  training
 ##########################################
 
-train, train_truth = prepare_train_data(100)
+training_size = 10
+print "training set size: " + str(training_size)
+
+train, train_truth = prepare_train_data(training_size)
+
 train_test.classifier_scores(train, train_truth)

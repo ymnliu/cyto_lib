@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def classifier_scores(train, train_truth, nfolds=10):
+def classifier_scores(train, train_truth, nfolds=5):
     res_mean = []
     res_std = []
 

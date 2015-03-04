@@ -1,5 +1,4 @@
 from skimage import transform
-
 from skimage import filter
 from skimage.morphology import dilation
 from skimage.morphology import disk
@@ -7,12 +6,10 @@ from sklearn import mixture
 import numpy as np
 from scipy import ndimage
 
-from util import open_cyto_tiff
-
-from util import load_cyto_list, serialize
+from util import open_cyto_tiff, load_cyto_list, serialize, show_progress
 
 
-thres_ratio = .3
+thres_ratio = .2
 noise_thres_ratio = .5 * thres_ratio
 
 
@@ -61,12 +58,15 @@ def get_image_feature(img):
     removed_peak = ndmask * im16
 
     ratio_peak = removed_peak.max() / (peak * 1.)
-    #aic, bic = get_aic_bic(img)
+
     #aic, bic = (0, 0) 
 
+    feature_global = [T, ratio_peak, nr_obj, im16.max(),
+                      np.sum(im_ma), np.sum(im16)]
 
-    feature_list = [T, ratio_peak, nr_obj, im16.max(),
-                    np.sum(im_ma), np.sum(im16)]
+    aic, bic = get_aic_bic(img)
+
+    feature_list = feature_global + aic.tolist() + bic.tolist()
 
     return feature_list
 
@@ -135,15 +135,19 @@ def load_features(label, sample_len):
 
     feature_all = np.array([])
 
-    for img_path in f:
+    for idx, img_path in enumerate(f):
         im16_org = open_cyto_tiff(img_path)
-
         feature_tmp = get_image_feature(im16_org)
 
-        if feature_all.shape[0] is 0:
+        if idx is 0:
             feature_all = np.asarray(feature_tmp)
         else:
+            feature_tmp = np.asarray(feature_tmp)
             feature_all = np.vstack((feature_all, feature_tmp))
+
+        prefix = "getting label %d" % label
+
+        show_progress(prefix, idx, sample_len)
 
     return feature_all
 

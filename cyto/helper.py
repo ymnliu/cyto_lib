@@ -3,12 +3,13 @@ __author__ = 'sijialiu'
 import time
 
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 import util as cu
-from image import CytoImage
 import cyto.feature as cf
 from cyto.util import print_block
-
+from image import CytoImage
 
 label_list = [0, 1, 2]
 file_list = [[], [], []]
@@ -32,7 +33,7 @@ def load_single_image(_label, idx):
     return img
 
 
-def prepare_train_data(train_size=100):
+def prepare_train_data(train_size=50):
     localtime = time.asctime(time.localtime(time.time()))
     print_block("Local current time :" + localtime)
     class_count = 3
@@ -68,3 +69,69 @@ def prepare_train_data(train_size=100):
 """
 
 
+def show_each_spot(cyto_image):
+    fig = plt.figure(figsize=plt.figaspect(1.))
+    idx = 1
+    for spot in cyto_image.spots:
+        ax = fig.add_subplot(2, 2, idx)
+        idx += 1
+
+        ax.imshow(spot.data, interpolation='nearest')
+
+    ax = fig.add_subplot(2, 2, idx)
+    ax.imshow(cyto_image.data, interpolation='nearest')
+
+    for spot in cyto_image.spots:
+        minr = (spot.origin[0] - spot.epd_sz)
+        maxr = spot.origin[0]
+        minc = (spot.origin[1] - spot.epd_sz)
+        maxc = (spot.origin[1])
+
+        rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
+                                  spot.size[1], spot.size[0],
+                                  fill=False, edgecolor='red', linewidth=1)
+        ax.add_patch(rect)
+    plt.show()
+    return fig
+
+
+def cyto_show_spots(self, ax=None):
+    if ax is None:
+        fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(6, 6))
+
+    ax.imshow(self.data)
+
+    for spot in self.spots:
+        minr = (spot.origin[0] - spot.epd_sz)
+        maxr = spot.origin[0]
+        minc = (spot.origin[1] - spot.epd_sz)
+        maxc = (spot.origin[1] )
+
+        rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
+                                  spot.size[1], spot.size[0],
+                                  fill=False, edgecolor='red', linewidth=1)
+        ax.add_patch(rect)
+
+    """
+    Show how to modify the coordinate formatter to
+    report the image "z"
+    value of the nearest pixel given x and y
+    """
+    ax.format_coord = get_mat_value(self.data)
+
+    plt.show()
+    return ax
+
+
+def get_mat_value(mat):
+    def format_coord(x, y):
+        numrows, numcols = mat.shape
+        col = int(x + 0.5)
+        row = int(y + 0.5)
+        if 0 <= col < numcols and 0 <= row < numrows:
+            z = mat[row, col]
+            return 'x=%1.2f, y=%1.2f, z=%1.2f' % (x, y, z)
+        else:
+            return 'x=%1.2f, y=%1.2f' % (x, y)
+
+    return format_coord
