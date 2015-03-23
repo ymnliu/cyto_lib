@@ -114,9 +114,9 @@ ax = fig.add_subplot(2,2, idx)
 ax.imshow(imgdata, interpolation='nearest')
 
 for spot in spots:
-    minr = (spot.origin[0] - spot.epd_sz) 
+    minr = (spot.origin[0] - spot.expand_size)
     maxr = spot.origin[0]
-    minc = (spot.origin[1] - spot.epd_sz)
+    minc = (spot.origin[1] - spot.expand_size)
     maxc = (spot.origin[1] )
     
     rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]), 

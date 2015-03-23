@@ -19,16 +19,10 @@ for label in label_list:
 
 
 def load_single_image(_label, idx):
-    # print (label, idx)
-    label = _label
-    spot_feature = np.array([])
-
-    file_name = file_list[label][idx]
+    file_name = file_list[_label][idx]
     img = CytoImage(file_name)
 
-    # img.cyto_show()
     img.get_cyto_spots()
-    spots = img.spots
 
     return img
 
@@ -70,28 +64,29 @@ def prepare_train_data(train_size=50):
 
 
 def show_each_spot(cyto_image):
-    fig = plt.figure(figsize=plt.figaspect(1.))
-    idx = 1
+    spots = cyto_image.spots
+    subplot_num = int(max((len(spots) + 1), 2))
+    fig, axarr = plt.subplots(subplot_num)
+
+    idx = 0
+
     for spot in cyto_image.spots:
-        ax = fig.add_subplot(2, 2, idx)
+        axarr[idx].imshow(spot.data, interpolation='nearest')
         idx += 1
 
-        ax.imshow(spot.data, interpolation='nearest')
+    axarr[idx].imshow(cyto_image.data, interpolation='nearest')
 
-    ax = fig.add_subplot(2, 2, idx)
-    ax.imshow(cyto_image.data, interpolation='nearest')
-
-    for spot in cyto_image.spots:
-        minr = (spot.origin[0] - spot.epd_sz)
-        maxr = spot.origin[0]
-        minc = (spot.origin[1] - spot.epd_sz)
-        maxc = (spot.origin[1])
-
-        rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
-                                  spot.size[1], spot.size[0],
-                                  fill=False, edgecolor='red', linewidth=1)
-        ax.add_patch(rect)
-    plt.show()
+    # for spot in cyto_image.spots:
+    # minr = (spot.origin[0] - spot.expand_size)
+    #     maxr = spot.origin[0]
+    #     minc = (spot.origin[1] - spot.expand_size)
+    #     maxc = (spot.origin[1])
+    #
+    #     rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
+    #                               spot.size[1], spot.size[0],
+    #                               fill=False, edgecolor='red', linewidth=1)
+    #     axarr[idx].add_patch(rect)
+    # plt.show()
     return fig
 
 
@@ -102,10 +97,10 @@ def cyto_show_spots(self, ax=None):
     ax.imshow(self.data)
 
     for spot in self.spots:
-        minr = (spot.origin[0] - spot.epd_sz)
+        minr = (spot.origin[0] - spot.expand_size)
         maxr = spot.origin[0]
-        minc = (spot.origin[1] - spot.epd_sz)
-        maxc = (spot.origin[1] )
+        minc = (spot.origin[1] - spot.expand_size)
+        maxc = (spot.origin[1])
 
         rect = mpatches.Rectangle((spot.origin[1], spot.origin[0]),
                                   spot.size[1], spot.size[0],
@@ -119,7 +114,7 @@ def cyto_show_spots(self, ax=None):
     """
     ax.format_coord = get_mat_value(self.data)
 
-    plt.show()
+    # plt.show()
     return ax
 
 

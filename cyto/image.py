@@ -21,38 +21,38 @@ class CytoImage:
         self.data = cu.open_cyto_tiff(path)
         self.path = path
         self.spots = []
+        # self.data = self.preprocessing()
+        self.get_cyto_spots()
 
     # print "spots count init"
 
-    def open_image(self, path):
-        self.data = cu.open_cyto_tiff(path)
-        return self.data
+    def preprocessing(self):
+        masked_img = self.get_masked_img()
+        return masked_img
 
+    def get_masked_img(self):
+        mask = self.get_mask()
+        return mask * self.data
 
     def get_mask(self):
         img = self.data > self.noise_ratio * self.data.max()
         skeleton = skeletonize(img)
-
         mask = dilation(skeleton > 0, disk(2))
-
-        self.masked_data = mask * self.data
         return mask
 
     def get_cyto_spots(self):
-        img = self.data
-        mask = self.get_mask()
-        masked_img = mask * img
-        labeled_img = label(mask)
+        if len(self.spots) is 0:
+            img = self.data
+            labeled_img = label(self.get_mask())
 
-        regions = regionprops(labeled_img)
+            regions = regionprops(labeled_img)
 
-        for region in regions:
-            minr, minc, maxr, maxc = region.bbox
-
-            mat = img[minr: maxr, minc: maxc]
-            spot = CytoSpot(mat)
-            spot.origin = (minr - spot.epd_sz, minc - spot.epd_sz)
-            self.spots.append(spot)
+            for region in regions:
+                minr, minc, maxr, maxc = region.bbox
+                mat = img[minr: maxr, minc: maxc]
+                spot = CytoSpot(mat)
+                spot.origin = (minr - spot.expand_size, minc - spot.expand_size)
+                self.spots.append(spot)
 
         return self.spots
 
@@ -75,7 +75,7 @@ class CytoImage:
             train = train.T
         return train
 
-
     def get_feature(self):
         return np.array(cf.get_image_feature(self.data))
+
 

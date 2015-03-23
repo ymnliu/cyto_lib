@@ -16,7 +16,7 @@ class CytoSpot:
     org_data = []
     data = []
     norm_data = []
-    epd_sz = 1
+    expand_size = 1  # add boundary expansion
     region = None
     origin = (-1, -1)
     size = (-1, -1)
@@ -27,12 +27,12 @@ class CytoSpot:
         org_data = data
         (x, y) = org_data.shape
 
-        self.data = np.zeros((x + 2 * self.epd_sz,
-                              y + 2 * self.epd_sz))
+        self.size = (x + 2 * self.expand_size, y + 2 * self.expand_size)
 
-        self.size = (x + 2 * self.epd_sz, y + 2 * self.epd_sz)
-        self.data[self.epd_sz:x + self.epd_sz,
-        self.epd_sz:y + self.epd_sz] = org_data
+        self.data = np.zeros(self.size)
+
+        self.data[self.expand_size:x + self.expand_size,
+        self.expand_size:y + self.expand_size] = org_data
 
         self.norm_data = self.data / self.data.sum()
         # print self.data
@@ -97,18 +97,3 @@ class CytoSpot:
     def get_log_data(self):
         return np.log(self.data + np.ones(self.data.shape))
 
-        # def serilize(self):
-        # data = np.floor(self.data/50)
-        #     res = np.array([])
-        #     it = np.nditer(data, flags=['multi_index'])
-        #     while not it.finished:
-        #         (d, x, y) =  (it[0], it.multi_index[0], it.multi_index[1])
-        #         dtmp = np.tile([x, y], (d, 1))
-        #         if res.shape[0]is 0:
-        #         res = dtmp
-        #         else:
-        #         res = np.vstack((res, dtmp))
-        #
-        #         it.iternext()
-        #
-        #     return res
