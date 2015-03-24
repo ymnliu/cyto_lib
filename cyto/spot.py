@@ -21,7 +21,7 @@ class CytoSpot:
     origin = (-1, -1)
     size = (-1, -1)
     bbox = (-1, -1, -1, -1)
-    noise_ratio = .3
+    noise_ratio = .1
 
     def __init__(self, data):
         org_data = data

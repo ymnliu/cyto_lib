@@ -7,7 +7,7 @@ import cyto.util
 import numpy as np
 
 
-sample_size = 300
+sample_size = 3000
 
 path_prefix = "../../result"
 
@@ -15,7 +15,9 @@ spot_count_list = []
 
 spot_max = np.zeros((3, sample_size, 5))
 
-for label in range(3):
+label_list = [1]
+
+for label in label_list:
     print "\nLabel %d" % label
 
     fig_dir = "{}/{}".format(path_prefix, label)
@@ -47,3 +49,21 @@ for label in range(3):
         print "%d, %d  -> %.3f" % \
               (label, i,
                spot_count_list.count(i) / float(len(spot_count_list)))
+
+smax1 = spot_max[1]
+smax1_nz = smax1[:, 1] > 0
+sm_sorted = np.sort(smax1[smax1_nz], axis=1)
+a = sm_sorted[:, -1] / sm_sorted[:, -2]
+a = 1. / a
+print a.shape[0]
+fig_count = 2
+fig, axarr = plt.subplots(2, 2)
+fig.suptitle("disomy - bin # wrt spot max ratio\n%s\n num of cases: %d" % (__file__, a.shape[0]))
+# ax.plot(a, linewidth=3, alpha=0.5, label='disomy max ratio')
+for sub_id, bin_num in enumerate([10, 20, 40, 80]):
+    sub_row, sub_col = sub_id / 2, sub_id % 2
+    axarr[sub_row][sub_col].hist(a, bin_num, fc='gray',
+                                 histtype='stepfilled', alpha=0.3, normed=True)
+    axarr[sub_row][sub_col].set_title('bin_num: %d' % bin_num)
+    axarr[sub_row][sub_col].set_xlim(.0, 1.1)
+plt.show()

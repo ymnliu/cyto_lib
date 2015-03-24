@@ -78,7 +78,7 @@ def show_each_spot(cyto_image):
 
     # for spot in cyto_image.spots:
     # minr = (spot.origin[0] - spot.expand_size)
-    #     maxr = spot.origin[0]
+    # maxr = spot.origin[0]
     #     minc = (spot.origin[1] - spot.expand_size)
     #     maxc = (spot.origin[1])
     #
