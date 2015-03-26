@@ -63,9 +63,9 @@ print beta_a, beta_b
 
 
 # rv = beta(beta_a, beta_b)
-rv = beta(2, 5, loc=floc, scale=fscale)
-x = np.linspace(beta.ppf(0.01, beta_a, beta_b),
-                beta.ppf(0.99, beta_a, beta_b), 100)
+rv = beta(beta_a, beta_b, loc=floc, scale=fscale)
+x = np.linspace(beta.ppf(0.01, beta_a, beta_b, loc=floc, scale=fscale),
+                beta.ppf(0.99, beta_a, beta_b, loc=floc, scale=fscale), 100)
 
 fig_count = 2
 fig, axarr = plt.subplots(2, 2)
@@ -78,13 +78,13 @@ for sub_id, bin_num in enumerate([10, 20, 40, 80]):
     sub_row, sub_col = sub_id / 2, sub_id % 2
     ax = axarr[sub_row][sub_col]
 
-    ax.hist(a, bin_num, fc='gray',
-            histtype='stepfilled', alpha=0.3, normed=True)
+    ax.hist(a, bin_num, fc='b',  # histtype='stepfilled',
+            alpha=0.3, normed=True)
     ax.set_title('bin_num: %d' % bin_num)
     ax.set_xlim(.0, 1.1)
     ax.plot(x, rv.pdf(x), 'k-', lw=2)
-    ax.set_ylim([0, 3])
-    ax.text(.5, 2.6, "beta param:\n a, b, loc, scale\n %.2f, %.2f, %.2f, %.2f" %
+    ax.set_ylim([0, 2.5])
+    ax.text(.5, 2.0, "beta param:\n a, b, loc, scale\n %.2f, %.2f, %.2f, %.2f" %
             (beta_a, beta_b, floc, fscale))
 # plt.show()
 
@@ -97,7 +97,6 @@ print len(tri_sorted)
 
 tri_sum = np.sum(tri_sorted, axis=1)
 tri_normed = (np.float_(tri_sorted).T / tri_sum)[2:5]
-print tri_normed
 
 from mpl_toolkits.mplot3d import Axes3D
 

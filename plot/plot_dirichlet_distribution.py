@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 
+# region Description
 corners = np.array([[0, 0], [1, 0], [0.5, 0.75 ** 0.5]])
 triangle = tri.Triangulation(corners[:, 0], corners[:, 1])
 
@@ -18,15 +19,16 @@ for (i, mesh) in enumerate((triangle, trimesh)):
     plt.axis('equal')
 
 plt.show()
+# endregion
 
 # Mid-points of triangle sides opposite of each corner
-midpoints = [(corners[(i + 1) % 3] + corners[(i + 2) % 3]) / 2.0 \
+midpoints = [(corners[(i + 1) % 3] + corners[(i + 2) % 3]) / 2.0
              for i in range(3)]
 
 
 def xy2bc(xy, tol=1.e-3):
-    '''Converts 2D Cartesian coordinates to barycentric.'''
-    s = [(corners[i] - midpoints[i]).dot(xy - midpoints[i]) / 0.75 \
+    """Converts 2D Cartesian coordinates to barycentric."""
+    s = [(corners[i] - midpoints[i]).dot(xy - midpoints[i]) / 0.75
          for i in range(3)]
     return np.clip(s, tol, 1.0 - tol)
 
@@ -63,4 +65,5 @@ def draw_pdf_contours(dist, nlevels=200, subdiv=8, **kwargs):
     plt.show()
 
 
-draw_pdf_contours(Dirichlet([0.999, 0.999, 0.999]))
+if __name__ == "__main__":
+    draw_pdf_contours(Dirichlet([0.999, 0.999, 0.999]))

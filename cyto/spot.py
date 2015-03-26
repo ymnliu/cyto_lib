@@ -84,8 +84,8 @@ class CytoSpot:
         return np.sqrt(np.diag(pcov)).sum()
 
     def get_2d_gaussian_param(self):
-        popt, pcov = gaussian_fit_2d(self.data)
-        return popt, pcov
+        return gaussian_fit_2d(self.data)
+
 
     def show_spot(self, ax):
         ax.plot(self.data)

@@ -9,7 +9,7 @@ def gaussian_function(x, *p):
 
 
 def twod_gaussian_theta((x, y), *p):
-    ' 2d gaussian function with input of theta, (x, y) and offset'
+    """ 2d gaussian function with input of theta, (x, y) and offset"""
     (amplitude, xo, yo, sigma_x, sigma_y, theta, offset) = p
     xo = float(xo)
     yo = float(yo)    
@@ -44,7 +44,8 @@ def gaussian_fit_2d(data2d):
     init_0 = (data.max(), h/2, w/2, 1, 1, 0, 0)	
     try:
         popt, pcov = curve_fit(twod_gaussian_theta, (x, y), data.ravel(), p0=init_0)
-        return popt, pcov
+        perr = np.sum(np.sqrt(np.diag(pcov)))
+        return np.array(popt, perr).ravel()
     except RuntimeError:
         print("Error - curve_fit failed")
         return None
