@@ -45,7 +45,10 @@ def gaussian_fit_2d(data2d):
     try:
         popt, pcov = curve_fit(twod_gaussian_theta, (x, y), data.ravel(), p0=init_0)
         perr = np.sum(np.sqrt(np.diag(pcov)))
-        return np.array(popt, perr).ravel()
-    except RuntimeError:
-        print("Error - curve_fit failed")
+        if np.isinf(perr) or np.isnan(perr) or perr > 1000:
+            raise Exception('perr is inf or nan')
+        return np.append(popt, perr)
+    except (RuntimeError, Exception) as exception:
+        print exception
         return None
+

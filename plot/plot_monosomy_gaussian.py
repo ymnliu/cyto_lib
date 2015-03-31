@@ -9,7 +9,7 @@ import numpy as np
 import cyto.gaussian_func
 from scipy.stats import beta
 
-sample_size = 300
+sample_size = 1000
 
 path_prefix = "../../result"
 
@@ -17,7 +17,7 @@ spot_count_list = []
 
 spot_max = np.zeros((3, sample_size, 5))
 
-label_list = [0]
+label_list = [2]
 
 spot_gaussian_fit_feature = np.array([])
 
@@ -32,6 +32,7 @@ for label in label_list:
             # spot_max[label][i][spot_id] = np.max(spot.data)
 
             popt = spot.get_2d_gaussian_param()
+
             if popt is None:
                 continue
 
@@ -42,7 +43,7 @@ for label in label_list:
                     np.vstack((spot_gaussian_fit_feature, popt))
 
     np.set_printoptions(precision=3)
-    print spot_gaussian_fit_feature
+    # print spot_gaussian_fit_feature
     print spot_gaussian_fit_feature.shape
 
     sft = spot_gaussian_fit_feature.T
@@ -50,6 +51,5 @@ for label in label_list:
     for sf in sft:
         print ""
         print sf.mean()
-
         print sf.std()
-
+        print sf
