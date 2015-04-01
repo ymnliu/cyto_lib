@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
 
 # Define model function to be used to fit to the data above:
@@ -21,7 +22,8 @@ def twod_gaussian_theta((x, y), *p):
 
 
 def twod_gaussian_cov((x, y), *p):
-    ' 2d gaussian function with input of covariance matrix, (x, y) and offset'
+    """ 2d gaussian function with input of
+     covariance matrix, (x, y) and offset"""
     (A, mu, cov_matrix, offset) = p
     xo = mu[0]
     yo = mu[1]
@@ -46,9 +48,19 @@ def gaussian_fit_2d(data2d):
         popt, pcov = curve_fit(twod_gaussian_theta, (x, y), data.ravel(), p0=init_0)
         perr = np.sum(np.sqrt(np.diag(pcov)))
         if np.isinf(perr) or np.isnan(perr) or perr > 1000:
-            raise Exception('perr is inf or nan')
+            if perr > 1000:
+                raise Exception('large')
+            if np.isinf(perr):
+                raise Exception('inf')
+            if np.isnan(perr):
+                raise Exception('nan')
         return np.append(popt, perr)
     except (RuntimeError, Exception) as exception:
-        print exception
-        return None
+        if isinstance(exception, RuntimeError):
+            exp_str = "opt404"
+        else:
+            exp_str = exception.args[0]
+        print exp_str
+
+        return exp_str
 

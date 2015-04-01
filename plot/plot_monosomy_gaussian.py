@@ -8,6 +8,7 @@ import cyto.util
 import numpy as np
 import cyto.gaussian_func
 from scipy.stats import beta
+import cyto.util
 
 sample_size = 1000
 
@@ -33,7 +34,8 @@ for label in label_list:
 
             popt = spot.get_2d_gaussian_param()
 
-            if popt is None:
+            if isinstance(popt, basestring):
+                ch.save_spot(spot, cyto.util.root + "/../result/abnormal", popt)
                 continue
 
             if spot_gaussian_fit_feature.shape[0] is 0:

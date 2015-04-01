@@ -6,7 +6,7 @@ import shutil
 import skimage.io
 import numpy as np
 import cv2
-
+import time, datetime
 
 root = '/home/sijialiu/cyto/data'
 
@@ -149,3 +149,9 @@ def show_progress(prefix_str, process, total):
         display_str = prefix_str + ": %.1f%%\r"
         sys.stdout.write(display_str % (100 * processed_rate))
         sys.stdout.flush()
+
+
+def gen_time_stamp(format_str='%Y%m%d%H%M-%S%f'):
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime(format_str)
+    return st

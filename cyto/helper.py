@@ -130,3 +130,16 @@ def get_mat_value(mat):
             return 'x=%1.2f, y=%1.2f' % (x, y)
 
     return format_coord
+
+
+def save_spot(spot, target_path, exp_str):
+    import cyto.util
+
+    st = cyto.util.gen_time_stamp()
+    if len(exp_str) is 0:
+        pre = target_path + "/" + st + '.png'
+    else:
+        pre = target_path + "/" + exp_str + "-" + st + '.png'
+
+    plt.imshow(spot.data)
+    plt.savefig(pre)
