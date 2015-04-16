@@ -6,6 +6,7 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
 from skimage.measure import regionprops, label
 from gaussian_func import gaussian_fit_2d
+from cauchy_func import cauthy_fit_2d
 from scipy import sparse
 
 
@@ -86,6 +87,8 @@ class CytoSpot:
     def get_2d_gaussian_param(self):
         return gaussian_fit_2d(self.data)
 
+    def get_2d_cauthy_param(self):
+        return cauthy_fit_2d(self.data)
 
     def show_spot(self, ax):
         ax.plot(self.data)

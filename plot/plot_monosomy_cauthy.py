@@ -20,7 +20,7 @@ spot_max = np.zeros((3, sample_size, 5))
 
 label_list = [0]
 
-spot_gaussian_fit_feature = np.array([])
+spot_cauthy_fit_feature = np.array([])
 
 for label in label_list:
     for i in range(sample_size):
@@ -32,23 +32,24 @@ for label in label_list:
         for spot_id, spot in enumerate(spots):
             # spot_max[label][i][spot_id] = np.max(spot.data)
 
-            popt = spot.get_2d_gaussian_param()
+            popt = spot.get_2d_cauthy_param()
 
             if isinstance(popt, basestring):
                 # ch.save_spot(spot, cyto.util.root + "/../result/abnormal", popt)
                 continue
 
-            if spot_gaussian_fit_feature.shape[0] is 0:
-                spot_gaussian_fit_feature = np.array(popt)
+            print "success"
+            if spot_cauthy_fit_feature.shape[0] is 0:
+                spot_cauthy_fit_feature = np.array(popt)
             else:
-                spot_gaussian_fit_feature = \
-                    np.vstack((spot_gaussian_fit_feature, popt))
+                spot_cauthy_fit_feature = \
+                    np.vstack((spot_cauthy_fit_feature, popt))
 
     np.set_printoptions(precision=3)
-    # print spot_gaussian_fit_feature
-    print spot_gaussian_fit_feature.shape
+    print spot_cauthy_fit_feature
+    print spot_cauthy_fit_feature.shape
 
-    sft = spot_gaussian_fit_feature.T
+    sft = spot_cauthy_fit_feature.T
 
     for sf in sft:
         print ""

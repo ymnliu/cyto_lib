@@ -2,15 +2,7 @@ import numpy as np
 import scipy.optimize as opt
 import matplotlib.pyplot as plt
 
-def twoD_Gaussian((x, y), amplitude, xo, yo, sigma_x, sigma_y, theta, offset):
-    xo = float(xo)
-    yo = float(yo)    
-    a = (np.cos(theta)**2)/(2*sigma_x**2) + (np.sin(theta)**2)/(2*sigma_y**2)
-    b = -(np.sin(2*theta))/(4*sigma_x**2) + (np.sin(2*theta))/(4*sigma_y**2)
-    c = (np.sin(theta)**2)/(2*sigma_x**2) + (np.cos(theta)**2)/(2*sigma_y**2)
-    g = offset + amplitude*np.exp( - (a*((x-xo)**2) + 2*b*(x-xo)*(y-yo) 
-                            + c*((y-yo)**2)))
-    return g.ravel()
+from cyto.cauchy_func import twod_cauthy
 
 
 # Create x and y indices
@@ -19,7 +11,7 @@ y = np.linspace(0, 200, 201)
 x, y = np.meshgrid(x, y)
 
 #create data
-data = twoD_Gaussian((x, y), 3, 100, 100, 20, 40, 0, 10)
+data = twod_cauthy((x, y), 36, 1.5, 1.2, 0.1, 64)
 print data.shape
 # plot twoD_Gaussian data generated above
 plt.figure()
